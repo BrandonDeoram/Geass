@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "199180333247",
+    "project_id": "geass-c6163",
+    "storage_bucket": "geass-c6163.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199180333247:android:54af4714d39adead8c960a",
+        "android_client_info": {
+          "package_name": "com.example.geassapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199180333247-226g48ukkk1h2gpj7jfmh61jc0t3nddj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqLyUAX-9QLUTn6rmu3iIW2PezHoKKKv8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199180333247-226g48ukkk1h2gpj7jfmh61jc0t3nddj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
