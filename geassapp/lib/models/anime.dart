@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
 
 class Anime {
+  final String animeId;
   final String name;
   final List<dynamic> categories;
   final String descript;
@@ -10,6 +14,7 @@ class Anime {
   final String image;
 
   Anime({
+    required this.animeId,
     required this.name,
     required this.categories,
     required this.descript,
@@ -19,6 +24,7 @@ class Anime {
   });
   factory Anime.fromMap(Map<String, dynamic> data) {
     return Anime(
+      animeId: data['animeId'],
       name: data['name'],
       categories: data['categories'],
       descript: data['descript'],
@@ -29,6 +35,7 @@ class Anime {
   }
 
   Map<String, dynamic> toJson() => {
+        'animeId': animeId,
         'name': name,
         'categories': categories,
         'descript': descript,
@@ -40,6 +47,7 @@ class Anime {
 
 List<Anime> animeList = [
   Anime(
+      animeId: uuid.v4(),
       name: "One Piece",
       categories: ["Action", "Adventure", "Comedy", "Drama", "Fantasy"],
       descript:
@@ -48,6 +56,7 @@ List<Anime> animeList = [
       rating: "3.62",
       image: "https://cdn.myanimelist.net/images/anime/6/73245.jpg"),
   Anime(
+      animeId: uuid.v4(),
       name: "Jujutsu Kaisen",
       categories: ["Action", "Supernatural"],
       descript:
@@ -56,6 +65,7 @@ List<Anime> animeList = [
       rating: "4.1",
       image: "https://cdn.myanimelist.net/images/anime/1171/109222.jpg"),
   Anime(
+      animeId: uuid.v4(),
       name: "Attack On Titan",
       categories: ["Action", "Drama", "Fantasy", "Myster"],
       descript:

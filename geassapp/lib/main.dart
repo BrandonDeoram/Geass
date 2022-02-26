@@ -39,35 +39,58 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback(
-      (_) async {
-        // Input method you want change before build.
-        AnimeNotifier animeNotifier =
-            Provider.of<AnimeNotifier>(context, listen: false);
-        DataBaseService().getAnimes(animeNotifier);
-        DataBaseService().getAdventureAnime(animeNotifier);
-      },
-    );
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      AnimeNotifier animeNotifier =
+          Provider.of<AnimeNotifier>(context, listen: false);
+      DataBaseService().getTypeAnime(animeNotifier, "Drama");
+      DataBaseService().getTypeAnime(animeNotifier, "Action");
+      print("INITS");
+    });
 
     super.initState();
   }
+  //Plant to watch
+  //-> 10075
+//Animes
+//->10075
 
+//collcetion.path(planttowatch).getDocs() -> Getting animeID's then using streambuidler->pathtoanime.match(animeID's) and display that
   @override
   Widget build(BuildContext context) {
-    AnimeNotifier animeNotifier = Provider.of<AnimeNotifier>(context);
+    AnimeNotifier animeNotifier =
+        Provider.of<AnimeNotifier>(context, listen: true);
+    print('BUILDING NOW');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Start of a new app'),
       ),
-      body: Center(
-        child: ListView.builder(
-          itemCount: animeNotifier.adventureList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              child: Text(animeNotifier.adventureList[index].name),
-            );
-          },
-        ),
+      body: Column(
+        children: [
+          Container(
+            height: 100,
+            width: 100,
+            child: ListView.builder(
+              itemCount: animeNotifier.dramaList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  child: Text(animeNotifier.dramaList[index].name),
+                );
+              },
+            ),
+          ),
+          Container(
+            height: 100,
+            width: 100,
+            child: ListView.builder(
+              itemCount: animeNotifier.actionList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  child: Text(animeNotifier.actionList[index].name),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},

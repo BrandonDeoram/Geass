@@ -31,6 +31,7 @@ dependencies:
   firebase_auth: ^3.3.7
   google_sign_in: '^4.5.1'
   cloud_firestore: ^3.1.8
+  uuid: ^3.0.6
   flutter:
     sdk: flutter
 

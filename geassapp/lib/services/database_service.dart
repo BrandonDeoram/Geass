@@ -19,25 +19,26 @@ class DataBaseService {
       Anime anime = Anime.fromMap(snap.data());
       _animeList.add(anime);
     }
-    animeNotifier.animeList = _animeList;
   }
 
-  getAdventureAnime(AnimeNotifier animeNotifier) async {
-    List<Anime> _adventureList = [];
+  getTypeAnime(AnimeNotifier animeNotifier, String cat) async {
+    List<Anime> list = [];
     var anime = db.collection(Path.animes());
-    anime.where('categories', arrayContains: "Action").get().then((snapshot) {
+    await anime.where('categories', arrayContains: cat).get().then((snapshot) {
       for (var snap in snapshot.docs) {
         Anime anime = Anime.fromMap(snap.data());
-        _adventureList.add(anime);
+        list.add(anime);
       }
     });
-    animeNotifier.adventureList = _adventureList;
+    animeNotifier.setanimeList(list, cat);
   }
 
-  //Write
   // Future<void> addAllAnimes() async {
   //   for (int i = 0; i < animeList.length; i++) {
-  //     db.collection(Path.animes()).add(animeList[i].toJson());
+  //     db
+  //         .collection(Path.animes())
+  //         .doc(animeList[i].animeID)
+  //         .set(animeList[i].toJson());
   //   }
   // }
 }
