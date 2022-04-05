@@ -1,7 +1,15 @@
+// @dart=2.9
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/providers/anime_notifier.dart';
+import 'package:geassapp/providers/google_signin.dart';
+import 'package:geassapp/screens/home/home_page.dart';
+import 'package:geassapp/screens/wrapper/home_wrapper.dart';
 import 'package:geassapp/services/database_service.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 Future main() async {
@@ -10,93 +18,89 @@ Future main() async {
   runApp(const MyApp());
 }
 
+final TextTheme textTheme = TextTheme(
+  headline1: GoogleFonts.poppins(
+      fontSize: 97,
+      fontWeight: FontWeight.w300,
+      letterSpacing: -1.5,
+      color: Colors.white),
+  headline2: GoogleFonts.poppins(
+      fontSize: 61,
+      fontWeight: FontWeight.w300,
+      letterSpacing: -0.5,
+      color: Colors.white),
+  headline3: GoogleFonts.poppins(
+      fontSize: 48, fontWeight: FontWeight.w400, color: Colors.white),
+  headline4: GoogleFonts.poppins(
+      fontSize: 34,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.25,
+      color: Colors.white),
+  headline5: GoogleFonts.poppins(
+      fontSize: 24, fontWeight: FontWeight.w400, color: Colors.white),
+  headline6: GoogleFonts.poppins(
+      fontSize: 20,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.15,
+      color: Colors.white),
+  subtitle1: GoogleFonts.poppins(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.15,
+      color: Colors.white),
+  subtitle2: GoogleFonts.poppins(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0.1,
+      color: Colors.white),
+  bodyText1: GoogleFonts.poppins(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.5,
+      color: Colors.white),
+  bodyText2: GoogleFonts.poppins(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.25,
+      color: Colors.white),
+  button: GoogleFonts.poppins(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 1.25,
+      color: Colors.white),
+  caption: GoogleFonts.poppins(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0.4,
+      color: Colors.white),
+  overline: GoogleFonts.poppins(
+      fontSize: 10,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 1.5,
+      color: Colors.white),
+);
+
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AnimeNotifier()),
+        ChangeNotifierProvider(create: (context) => GoogleSignInProvider()),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: ScreenUtilInit(
+        builder: () => MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.grey,
+            primaryColor: Colors.white,
+            textTheme: textTheme,
+          ),
+          home: Wrapper(),
         ),
-        home: const MyHomePage(),
+        designSize: const Size(1080, 1920),
       ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      AnimeNotifier animeNotifier =
-          Provider.of<AnimeNotifier>(context, listen: false);
-      DataBaseService().getTypeAnime(animeNotifier, "Drama");
-      DataBaseService().getTypeAnime(animeNotifier, "Action");
-      print("INITS");
-    });
-
-    super.initState();
-  }
-  //Plant to watch
-  //-> 10075
-//Animes
-//->10075
-
-//collcetion.path(planttowatch).getDocs() -> Getting animeID's then using streambuidler->pathtoanime.match(animeID's) and display that
-  @override
-  Widget build(BuildContext context) {
-    AnimeNotifier animeNotifier =
-        Provider.of<AnimeNotifier>(context, listen: true);
-    print('BUILDING NOW');
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Start of a new app'),
-      ),
-      body: Column(
-        children: [
-          Container(
-            height: 100,
-            width: 100,
-            child: ListView.builder(
-              itemCount: animeNotifier.dramaList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  child: Text(animeNotifier.dramaList[index].name),
-                );
-              },
-            ),
-          ),
-          Container(
-            height: 100,
-            width: 100,
-            child: ListView.builder(
-              itemCount: animeNotifier.actionList.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  child: Text(animeNotifier.actionList[index].name),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

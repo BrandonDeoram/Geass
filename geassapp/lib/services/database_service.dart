@@ -33,12 +33,12 @@ class DataBaseService {
     animeNotifier.setanimeList(list, cat);
   }
 
-  // Future<void> addAllAnimes() async {
-  //   for (int i = 0; i < animeList.length; i++) {
-  //     db
-  //         .collection(Path.animes())
-  //         .doc(animeList[i].animeID)
-  //         .set(animeList[i].toJson());
-  //   }
-  // }
+  Future<void> addAllAnimes() async {
+    for (int i = 0; i < animeList.length; i++) {
+      db
+          .collection(Path.animes())
+          .doc(animeList[i].animeId)
+          .set(animeList[i].toJson());
+    }
+  }
 }
