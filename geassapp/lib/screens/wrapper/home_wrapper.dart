@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geassapp/main.dart';
 import 'package:geassapp/screens/home/home_page.dart';
 import 'package:geassapp/screens/wrapper/landing_page.dart';
+import 'package:geassapp/screens/wrapper/user_name_page.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class Wrapper extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasData) {
-            return HomePage();
+            return UserNamePage();
           } else if (snapshot.hasError) {
             return Center();
           } else {

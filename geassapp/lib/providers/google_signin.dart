@@ -17,8 +17,8 @@ class GoogleSignInProvider extends ChangeNotifier {
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-
       //Sign in
+
       await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       print("SOMETHIGN WENT WRONG");
