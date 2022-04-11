@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geassapp/models/anime.dart';
+import 'package:geassapp/models/user.dart';
 import 'package:geassapp/providers/anime_notifier.dart';
 import 'package:geassapp/services/path_service.dart';
 
@@ -40,5 +41,19 @@ class DataBaseService {
           .doc(animeList[i].animeId)
           .set(animeList[i].toJson());
     }
+  }
+
+  Future<void> addUser(User user) async {
+    var listUser = db.collection(Path.users());
+    listUser.add(user.toJson());
+  }
+
+  Future<bool?> searchUser(String? email) async {
+    bool? value;
+    var collection =
+        db.collection(Path.users()).where('email', isEqualTo: email).limit(1);
+    var snap = collection.snapshots();
+    await snap.isEmpty.then((result) => value = result);
+    return value;
   }
 }
