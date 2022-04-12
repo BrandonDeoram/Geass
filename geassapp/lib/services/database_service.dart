@@ -22,7 +22,7 @@ class DataBaseService {
     }
   }
 
-  getTypeAnime(AnimeNotifier animeNotifier, String cat) async {
+  Future<List<Anime>> getTypeAnime(String cat) async {
     List<Anime> list = [];
     var anime = db.collection(Path.animes());
     await anime.where('categories', arrayContains: cat).get().then((snapshot) {
@@ -31,7 +31,7 @@ class DataBaseService {
         list.add(anime);
       }
     });
-    animeNotifier.setanimeList(list, cat);
+    return list;
   }
 
   Future<void> addAllAnimes() async {

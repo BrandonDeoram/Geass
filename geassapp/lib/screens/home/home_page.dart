@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icons.list,
           ),
           FluidNavBarIcon(
-            icon: Icons.settings,
+            icon: Icons.person_sharp,
           ),
         ],
         onChange: _handleNavigationChange,
