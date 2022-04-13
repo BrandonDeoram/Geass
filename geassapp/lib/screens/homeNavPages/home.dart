@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/models/anime.dart';
+import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
 
 class Home extends StatelessWidget {
@@ -135,17 +136,29 @@ class Home extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    width: 280.w,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10.0.r),
-                          bottomRight: Radius.circular(10.0.r),
-                          topLeft: Radius.circular(10.0.r),
-                          bottomLeft: Radius.circular(10.0.r)),
-                      child: Image(
-                        image: NetworkImage(snapshot.data![index].image),
-                        fit: BoxFit.fill,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AnimeCard(
+                                  anime: snapshot.data![index],
+                                )),
+                      );
+                      print(snapshot.data![index].name);
+                    },
+                    child: Container(
+                      width: 280.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10.0.r),
+                            bottomRight: Radius.circular(10.0.r),
+                            topLeft: Radius.circular(10.0.r),
+                            bottomLeft: Radius.circular(10.0.r)),
+                        child: Image(
+                          image: NetworkImage(snapshot.data![index].image),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                   );

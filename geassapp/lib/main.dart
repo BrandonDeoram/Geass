@@ -95,6 +95,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.grey,
             primaryColor: Colors.white,
+            backgroundColor: Colors.black,
             textTheme: textTheme,
           ),
           home: Wrapper(),
