@@ -44,7 +44,7 @@ final TextTheme textTheme = TextTheme(
       letterSpacing: 0.15,
       color: Colors.white),
   subtitle1: GoogleFonts.poppins(
-      fontSize: 16,
+      fontSize: 12,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.15,
       color: Colors.white),
