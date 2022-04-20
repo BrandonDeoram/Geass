@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geassapp/models/user.dart';
+import 'package:geassapp/models/user1.dart';
 import 'package:geassapp/providers/google_signin.dart';
 import 'package:geassapp/screens/home/home_page.dart';
 import 'package:geassapp/services/database_service.dart';
@@ -93,8 +93,12 @@ class UserNamePage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 20),
                 child: FloatingActionButton(
                   onPressed: () {
-                    DataBaseService().addUser(User(
-                        userName.text, atName.text, email!, [], [], [], []));
+                    var f = email;
+                    if (f != null) {
+                      DataBaseService().addUser(
+                          User1(userName.text, atName.text, f, [], [], [], []));
+                    }
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const HomePage()),

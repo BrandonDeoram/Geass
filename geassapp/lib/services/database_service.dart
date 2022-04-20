@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geassapp/models/anime.dart';
-import 'package:geassapp/models/user.dart';
+import 'package:geassapp/models/user1.dart';
 import 'package:geassapp/providers/anime_notifier.dart';
 import 'package:geassapp/services/path_service.dart';
 
 class DataBaseService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   //Read
   Future<void> getAllAnime() async {
@@ -43,17 +45,43 @@ class DataBaseService {
     }
   }
 
-  Future<void> addUser(User user) async {
+  Future<void> addUser(User1 user) async {
     var listUser = db.collection(Path.users());
-    listUser.add(user.toJson());
+    listUser.doc(currentUser()).set(user.toJson());
   }
 
-  Future<bool?> searchUser(String? email) async {
-    bool? value;
-    var collection =
-        db.collection(Path.users()).where('email', isEqualTo: email).limit(1);
-    var snap = collection.snapshots();
-    await snap.isEmpty.then((result) => value = result);
-    return value;
+  // Future<bool?> searchUser(String? email) async {
+  //   bool? value;
+  //   var collection =
+  //       db.collection(Path.users()).where('email', isEqualTo: email).limit(1);
+  //   var snap = collection.snapshots();
+  //   await snap.isEmpty.then((result) => value = result);
+  //   return value;
+  // }
+  // Future<String> searchUser(String uuid) async {
+  //   bool? value;
+  //   var collection = db.collection(Path.users());
+  //   collection.
+  //   return collection;
+  // }
+  Future<String> searchUser(String uuid) async {
+    var a = await db.collection('users').doc(uuid).get();
+    if (a.exists) {
+      print('Exists');
+      return a.id;
+    } else {
+      print('DOES IT EXITS');
+      print(a.exists);
+      return "";
+    }
+  }
+
+  // addAnimeToList(String list,String animeID) {
+
+  // }
+  currentUser() {
+    final User? user = firebaseAuth.currentUser;
+    final uid = user?.uid.toString();
+    return uid;
   }
 }

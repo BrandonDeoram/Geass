@@ -2,7 +2,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/models/anime.dart';
+import 'package:geassapp/providers/google_signin.dart';
+import 'package:geassapp/services/database_service.dart';
 import 'package:google_sign_in/testing.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -128,7 +131,7 @@ class AnimeCard extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 10, right: 10),
                       child: Container(
-                        height: 180,
+                        height: 500.h,
                         child: SingleChildScrollView(
                           child: ReadMoreText(
                             anime.descript,
@@ -147,6 +150,7 @@ class AnimeCard extends StatelessWidget {
           )),
       floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
       floatingActionButton: SpeedDial(
+        spaceBetweenChildren: 40,
         overlayColor: Colors.transparent,
         buttonSize: Size(50, 50),
         icon: Icons.add,
@@ -157,7 +161,8 @@ class AnimeCard extends StatelessWidget {
           SpeedDialChild(
               child: Icon(Icons.playlist_add_rounded),
               onTap: () {
-                print('tapped');
+                //Pass through the animeID to Database
+                print(DataBaseService().currentUser());
               }),
           SpeedDialChild(child: Icon(Icons.remove_red_eye), onTap: () {}),
           SpeedDialChild(child: Icon(Icons.done), onTap: () {}),
@@ -168,7 +173,7 @@ class AnimeCard extends StatelessWidget {
         shape: const CircularNotchedRectangle(),
         notchMargin: 14.0,
         child: Container(
-          height: 30,
+          height: 80.h,
         ),
       ),
     );

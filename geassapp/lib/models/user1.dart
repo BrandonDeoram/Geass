@@ -1,4 +1,4 @@
-class User {
+class User1 {
   final String userName;
   final String userAt;
   final String email;
@@ -7,10 +7,10 @@ class User {
   final List<String> finished;
   final List<String> favourites;
 
-  User(this.userName, this.userAt, this.email, this.planToWatch, this.watching,
+  User1(this.userName, this.userAt, this.email, this.planToWatch, this.watching,
       this.finished, this.favourites);
-  factory User.fromMap(Map<String, dynamic> data) {
-    return User(
+  factory User1.fromMap(Map<String, dynamic> data) {
+    return User1(
       data['userName'],
       data['atName'],
       data['email'],

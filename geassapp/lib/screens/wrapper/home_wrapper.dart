@@ -25,8 +25,8 @@ class Wrapper extends StatelessWidget {
           } else if (snapshot.hasData) {
             //if google email is in the firebase database then send to homepage else go to UserNamePage
             return FutureBuilder(
-              future: DataBaseService().searchUser(snapshot.data!.email),
-              builder: (BuildContext context, snap) {
+              future: DataBaseService().searchUser(snapshot.data!.uid),
+              builder: (BuildContext context, AsyncSnapshot<String> snap) {
                 switch (snap.connectionState) {
                   case ConnectionState.waiting:
                     return Text('Loading....');
@@ -34,7 +34,13 @@ class Wrapper extends StatelessWidget {
                     if (snapshot.hasError) {
                       return Text('Error: ${snap.error}');
                     } else {
-                      return HomePage();
+                      print("from fireabse");
+                      print(snap.data);
+                      if (snap.data != snapshot.data!.uid) {
+                        return UserNamePage(snapshot.data!.email);
+                      } else {
+                        return HomePage();
+                      }
                     }
                 }
               },
