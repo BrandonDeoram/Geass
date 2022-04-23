@@ -38,6 +38,7 @@ dependencies:
   readmore: ^2.1.0
   flutter_rating_bar: ^4.0.0
   flutter_speed_dial: ^5.1.0
+  http: ^0.13.4
   flutter:
     sdk: flutter
 

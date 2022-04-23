@@ -4,23 +4,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/models/anime.dart';
 import 'package:geassapp/providers/google_signin.dart';
 import 'package:geassapp/services/database_service.dart';
-import 'package:google_sign_in/testing.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 // ignore_for_file: prefer_const_constructors
-class AnimeCard extends StatelessWidget {
+class AnimeCard extends StatefulWidget {
   final Anime anime;
   // ignore: use_key_in_widget_constructors
   const AnimeCard({required this.anime});
 
   @override
+  State<AnimeCard> createState() => _AnimeCardState();
+}
+
+class _AnimeCardState extends State<AnimeCard> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Colors.black,
       body: SafeArea(
           bottom: false,
           child: Stack(
@@ -36,7 +40,7 @@ class AnimeCard extends StatelessWidget {
                     child: ImageFiltered(
                       imageFilter: ImageFilter.blur(sigmaY: 2.8, sigmaX: 2.8),
                       child: Image(
-                        image: NetworkImage(anime.image),
+                        image: NetworkImage(widget.anime.image),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -49,7 +53,7 @@ class AnimeCard extends StatelessWidget {
                   height: 800.h,
                   width: 800.w,
                   child: Image(
-                    image: NetworkImage(anime.image),
+                    image: NetworkImage(widget.anime.image),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -77,7 +81,11 @@ class AnimeCard extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(335, 253, 0, 0),
                 child: IconButton(
                     iconSize: 40.0,
-                    onPressed: () {},
+                    onPressed: () {
+                      DataBaseService().fetchData();
+                      // DataBaseService()
+                      //     .addAnimeToList('favourites', widget.anime.animeId);
+                    },
                     icon: Icon(
                       Icons.favorite,
                       color: Colors.white,
@@ -90,12 +98,12 @@ class AnimeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      anime.name,
+                      widget.anime.name,
                       style: TextStyle(fontSize: 30),
                     ),
                     Row(
                       children: [
-                        for (var i in anime.categories)
+                        for (var i in widget.anime.categories)
                           Text(
                             i.toString() + " ",
                             style: TextStyle(
@@ -111,7 +119,7 @@ class AnimeCard extends StatelessWidget {
                           child: Container(
                             height: 20,
                             child: RatingBarIndicator(
-                              rating: double.parse(anime.rating),
+                              rating: double.parse(widget.anime.rating),
                               itemBuilder: (context, index) => Icon(
                                 Icons.star,
                                 color: Colors.amber,
@@ -124,7 +132,7 @@ class AnimeCard extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 8.0),
-                          child: Text(anime.rating),
+                          child: Text(widget.anime.rating),
                         )
                       ],
                     ),
@@ -134,7 +142,7 @@ class AnimeCard extends StatelessWidget {
                         height: 500.h,
                         child: SingleChildScrollView(
                           child: ReadMoreText(
-                            anime.descript,
+                            widget.anime.descript,
                             trimLines: 11,
                             trimMode: TrimMode.Line,
                             trimCollapsedText: '"',
@@ -162,10 +170,21 @@ class AnimeCard extends StatelessWidget {
               child: Icon(Icons.playlist_add_rounded),
               onTap: () {
                 //Pass through the animeID to Database
-                print(DataBaseService().currentUser());
+                DataBaseService()
+                    .addAnimeToList('planToWatch', widget.anime.animeId);
               }),
-          SpeedDialChild(child: Icon(Icons.remove_red_eye), onTap: () {}),
-          SpeedDialChild(child: Icon(Icons.done), onTap: () {}),
+          SpeedDialChild(
+              child: Icon(Icons.remove_red_eye),
+              onTap: () {
+                DataBaseService()
+                    .addAnimeToList('watching', widget.anime.animeId);
+              }),
+          SpeedDialChild(
+              child: Icon(Icons.done),
+              onTap: () {
+                DataBaseService()
+                    .addAnimeToList('finished', widget.anime.animeId);
+              }),
         ],
       ),
       bottomNavigationBar: BottomAppBar(

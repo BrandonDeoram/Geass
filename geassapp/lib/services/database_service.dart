@@ -4,6 +4,7 @@ import 'package:geassapp/models/anime.dart';
 import 'package:geassapp/models/user1.dart';
 import 'package:geassapp/providers/anime_notifier.dart';
 import 'package:geassapp/services/path_service.dart';
+import 'package:http/http.dart' as http;
 
 class DataBaseService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
@@ -76,12 +77,34 @@ class DataBaseService {
     }
   }
 
-  // addAnimeToList(String list,String animeID) {
+  addAnimeToList(String list, String animeID) async {
+    var col = db.collection(Path.users()).doc(currentUser()).get();
+    List<String> fireBaseList = [];
+    fireBaseList.add(animeID);
+    var a = await db
+        .collection('users')
+        .doc(currentUser())
+        .update({list: FieldValue.arrayUnion(fireBaseList)});
+  }
 
-  // }
   currentUser() {
     final User? user = firebaseAuth.currentUser;
     final uid = user?.uid.toString();
     return uid;
+  }
+
+  Future fetchData() async {
+    String stringRes;
+    http.Response response;
+
+    response =
+        await http.get(Uri.parse('https://api.myanimelist.net/v2/anime'));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      stringRes = response.body;
+      print(stringRes.toString());
+    } else {
+      print('didnt wokr');
+    }
   }
 }
