@@ -1,54 +1,56 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:geassapp/models/anime.dart';
+import 'package:geassapp/models/anime_class.dart';
 
-class AnimeNotifier with ChangeNotifier {
-  List<Anime> _animeList = [];
-  List<Anime> _adventureList = [];
-  List<Anime> _actionList = [];
-  List<Anime> _mysteryList = [];
-  List<Anime> _fantasyList = [];
-  List<Anime> _dramaList = [];
-  List<Anime> _supernaturalList = [];
+class AnimeClassNotifier with ChangeNotifier {
+  List<AnimeClass> _AnimeClassList = [];
+  List<AnimeClass> _adventureList = [];
+  List<AnimeClass> _actionList = [];
+  List<AnimeClass> _mysteryList = [];
+  List<AnimeClass> _fantasyList = [];
+  List<AnimeClass> _dramaList = [];
+  List<AnimeClass> _supernaturalList = [];
 
-  UnmodifiableListView<Anime> get animeList => UnmodifiableListView(_animeList);
-  UnmodifiableListView<Anime> get adventureList =>
+  UnmodifiableListView<AnimeClass> get AnimeClassList =>
+      UnmodifiableListView(_AnimeClassList);
+  UnmodifiableListView<AnimeClass> get adventureList =>
       UnmodifiableListView(_adventureList);
-  UnmodifiableListView<Anime> get shonenList =>
+  UnmodifiableListView<AnimeClass> get shonenList =>
       UnmodifiableListView(_adventureList);
-  UnmodifiableListView<Anime> get dramaList => UnmodifiableListView(_dramaList);
-  UnmodifiableListView<Anime> get actionList =>
+  UnmodifiableListView<AnimeClass> get dramaList =>
+      UnmodifiableListView(_dramaList);
+  UnmodifiableListView<AnimeClass> get actionList =>
       UnmodifiableListView(_actionList);
-  UnmodifiableListView<Anime> get fantasyList =>
+  UnmodifiableListView<AnimeClass> get fantasyList =>
       UnmodifiableListView(_fantasyList);
-  UnmodifiableListView<Anime> get mysteryList =>
+  UnmodifiableListView<AnimeClass> get mysteryList =>
       UnmodifiableListView(_mysteryList);
-  UnmodifiableListView<Anime> get supernaturalList =>
+  UnmodifiableListView<AnimeClass> get supernaturalList =>
       UnmodifiableListView(_supernaturalList);
 
-  void setanimeList(List<Anime> animeList, String cat) {
+  void setAnimeClassList(List<AnimeClass> AnimeClassList, String cat) {
     //Assign it to general list
     switch (cat) {
       case "Adventure":
-        _adventureList = animeList;
+        _adventureList = AnimeClassList;
         break;
       case "Shonen":
         break;
       case "Action":
-        _actionList = animeList;
+        _actionList = AnimeClassList;
         break;
       case "Fantasy":
-        _fantasyList = animeList;
+        _fantasyList = AnimeClassList;
         break;
       case "Mystery":
-        _mysteryList = animeList;
+        _mysteryList = AnimeClassList;
         break;
       case "Supernatural":
-        _supernaturalList = animeList;
+        _supernaturalList = AnimeClassList;
         break;
       case "Drama":
-        _dramaList = animeList;
+        _dramaList = AnimeClassList;
         break;
       default:
         {
@@ -59,7 +61,7 @@ class AnimeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  // set adventureList(List<Anime> adventureList) {
+  // set adventureList(List<AnimeClass> adventureList) {
   //   _adventureList = adventureList;
   //   notifyListeners();
   // }

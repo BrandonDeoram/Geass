@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AnimeNotifier()),
+        // ChangeNotifierProvider(create: (context) => AnimeNotifier()),
         ChangeNotifierProvider(create: (context) => GoogleSignInProvider()),
       ],
       child: ScreenUtilInit(

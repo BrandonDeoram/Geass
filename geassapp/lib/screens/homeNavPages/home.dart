@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geassapp/models/anime.dart';
+import 'package:geassapp/models/anime_class.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
+import 'package:jikan_api/jikan_api.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -93,7 +94,7 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.only(left: 10),
                 child: Container(
                   height: 400.h,
-                  child: futureBuilderMethod('Action'),
+                  child: futureBuilderMethod(2),
                 ),
               ),
               Padding(
@@ -107,7 +108,6 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Container(
                   height: 400.h,
-                  child: futureBuilderMethod('Supernatural'),
                 ),
               ),
             ],
@@ -117,10 +117,11 @@ class Home extends StatelessWidget {
     );
   }
 
-  futureBuilderMethod(String cat) {
+  futureBuilderMethod(int genreID) {
     return FutureBuilder(
-        future: DataBaseService().getTypeAnime(cat),
-        builder: (BuildContext context, AsyncSnapshot<List<Anime>> snapshot) {
+        future: DataBaseService().fetchGenre(genreID),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<AnimeItem>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -145,7 +146,7 @@ class Home extends StatelessWidget {
                                   anime: snapshot.data![index],
                                 )),
                       );
-                      print(snapshot.data![index].name);
+                      print(snapshot.data![index].title);
                     },
                     child: Container(
                       width: 280.w,
@@ -156,7 +157,7 @@ class Home extends StatelessWidget {
                             topLeft: Radius.circular(10.0.r),
                             bottomLeft: Radius.circular(10.0.r)),
                         child: Image(
-                          image: NetworkImage(snapshot.data![index].image),
+                          image: NetworkImage(snapshot.data![index].imageUrl),
                           fit: BoxFit.fill,
                         ),
                       ),

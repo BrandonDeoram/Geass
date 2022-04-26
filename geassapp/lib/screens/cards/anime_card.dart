@@ -1,9 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:geassapp/models/anime.dart';
+import 'package:geassapp/models/anime_class.dart';
 import 'package:geassapp/providers/google_signin.dart';
 import 'package:geassapp/services/database_service.dart';
+import 'package:jikan_api/jikan_api.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 // ignore_for_file: prefer_const_constructors
 class AnimeCard extends StatefulWidget {
-  final Anime anime;
+  final AnimeItem anime;
   // ignore: use_key_in_widget_constructors
   const AnimeCard({required this.anime});
 
@@ -22,6 +23,7 @@ class AnimeCard extends StatefulWidget {
 class _AnimeCardState extends State<AnimeCard> {
   @override
   Widget build(BuildContext context) {
+    double animeScore = (widget.anime.score! / 2).floorToDouble();
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.black,
@@ -40,7 +42,7 @@ class _AnimeCardState extends State<AnimeCard> {
                     child: ImageFiltered(
                       imageFilter: ImageFilter.blur(sigmaY: 2.8, sigmaX: 2.8),
                       child: Image(
-                        image: NetworkImage(widget.anime.image),
+                        image: NetworkImage(widget.anime.imageUrl),
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -53,7 +55,7 @@ class _AnimeCardState extends State<AnimeCard> {
                   height: 800.h,
                   width: 800.w,
                   child: Image(
-                    image: NetworkImage(widget.anime.image),
+                    image: NetworkImage(widget.anime.imageUrl),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -82,7 +84,6 @@ class _AnimeCardState extends State<AnimeCard> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: () {
-                      DataBaseService().fetchData();
                       // DataBaseService()
                       //     .addAnimeToList('favourites', widget.anime.animeId);
                     },
@@ -98,14 +99,14 @@ class _AnimeCardState extends State<AnimeCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.anime.name,
-                      style: TextStyle(fontSize: 30),
+                      widget.anime.title,
+                      style: TextStyle(fontSize: 25),
                     ),
                     Row(
                       children: [
-                        for (var i in widget.anime.categories)
+                        for (var i in widget.anime.genres)
                           Text(
-                            i.toString() + " ",
+                            i.name + " ",
                             style: TextStyle(
                                 fontWeight: FontWeight.w200,
                                 color: Colors.grey),
@@ -119,7 +120,7 @@ class _AnimeCardState extends State<AnimeCard> {
                           child: Container(
                             height: 20,
                             child: RatingBarIndicator(
-                              rating: double.parse(widget.anime.rating),
+                              rating: animeScore,
                               itemBuilder: (context, index) => Icon(
                                 Icons.star,
                                 color: Colors.amber,
@@ -132,7 +133,7 @@ class _AnimeCardState extends State<AnimeCard> {
                         ),
                         Padding(
                           padding: EdgeInsets.only(top: 8.0),
-                          child: Text(widget.anime.rating),
+                          child: Text(animeScore.toString()),
                         )
                       ],
                     ),
@@ -142,7 +143,7 @@ class _AnimeCardState extends State<AnimeCard> {
                         height: 500.h,
                         child: SingleChildScrollView(
                           child: ReadMoreText(
-                            widget.anime.descript,
+                            widget.anime.synopsis.toString(),
                             trimLines: 11,
                             trimMode: TrimMode.Line,
                             trimCollapsedText: '"',
@@ -171,19 +172,19 @@ class _AnimeCardState extends State<AnimeCard> {
               onTap: () {
                 //Pass through the animeID to Database
                 DataBaseService()
-                    .addAnimeToList('planToWatch', widget.anime.animeId);
+                    .addAnimeToList('planToWatch', widget.anime.malId);
               }),
           SpeedDialChild(
               child: Icon(Icons.remove_red_eye),
               onTap: () {
                 DataBaseService()
-                    .addAnimeToList('watching', widget.anime.animeId);
+                    .addAnimeToList('watching', widget.anime.malId);
               }),
           SpeedDialChild(
               child: Icon(Icons.done),
               onTap: () {
                 DataBaseService()
-                    .addAnimeToList('finished', widget.anime.animeId);
+                    .addAnimeToList('finished', widget.anime.malId);
               }),
         ],
       ),

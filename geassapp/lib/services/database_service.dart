@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:geassapp/models/anime.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:geassapp/models/anime_class.dart';
 import 'package:geassapp/models/user1.dart';
 import 'package:geassapp/providers/anime_notifier.dart';
+import 'package:geassapp/screens/homeNavPages/anime_lists.dart';
 import 'package:geassapp/services/path_service.dart';
+import 'package:jikan_api/jikan_api.dart';
 import 'package:http/http.dart' as http;
 
 class DataBaseService {
@@ -16,35 +19,26 @@ class DataBaseService {
     print(qshot.docs.map((e) => e.data));
   }
 
-  getAnimes(AnimeNotifier animeNotifier) async {
-    final snapshot = await db.collection(Path.animes()).get();
-    List<Anime> _animeList = [];
-    for (var snap in snapshot.docs) {
-      Anime anime = Anime.fromMap(snap.data());
-      _animeList.add(anime);
-    }
-  }
+  // getAnimes(AnimeNotifier animeNotifier) async {
+  //   final snapshot = await db.collection(Path.animes()).get();
+  //   List<Anime> _animeList = [];
+  //   for (var snap in snapshot.docs) {
+  //     Anime anime = Anime.fromMap(snap.data());
+  //     _animeList.add(anime);
+  //   }
+  // }
 
-  Future<List<Anime>> getTypeAnime(String cat) async {
-    List<Anime> list = [];
-    var anime = db.collection(Path.animes());
-    await anime.where('categories', arrayContains: cat).get().then((snapshot) {
-      for (var snap in snapshot.docs) {
-        Anime anime = Anime.fromMap(snap.data());
-        list.add(anime);
-      }
-    });
-    return list;
-  }
-
-  Future<void> addAllAnimes() async {
-    for (int i = 0; i < animeList.length; i++) {
-      db
-          .collection(Path.animes())
-          .doc(animeList[i].animeId)
-          .set(animeList[i].toJson());
-    }
-  }
+  // Future<List<Anime>> getTypeAnime(String cat) async {
+  //   List<Anime> list = [];
+  //   var anime = db.collection(Path.animes());
+  //   await anime.where('categories', arrayContains: cat).get().then((snapshot) {
+  //     for (var snap in snapshot.docs) {
+  //       Anime anime = Anime.fromMap(snap.data());
+  //       list.add(anime);
+  //     }
+  //   });
+  //   return list;
+  // }
 
   Future<void> addUser(User1 user) async {
     var listUser = db.collection(Path.users());
@@ -77,9 +71,9 @@ class DataBaseService {
     }
   }
 
-  addAnimeToList(String list, String animeID) async {
+  addAnimeToList(String list, int animeID) async {
     var col = db.collection(Path.users()).doc(currentUser()).get();
-    List<String> fireBaseList = [];
+    List<int> fireBaseList = [];
     fireBaseList.add(animeID);
     var a = await db
         .collection('users')
@@ -93,18 +87,14 @@ class DataBaseService {
     return uid;
   }
 
-  Future fetchData() async {
-    String stringRes;
-    http.Response response;
-
-    response =
-        await http.get(Uri.parse('https://api.myanimelist.net/v2/anime'));
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      stringRes = response.body;
-      print(stringRes.toString());
-    } else {
-      print('didnt wokr');
+  Future<List<AnimeItem>> fetchGenre(int genreID) async {
+    var jikan = Jikan();
+    var top = await jikan.getGenre(genreID, GenreType.anime);
+    List<AnimeItem> animeList = [];
+    for (var i = 0; i <= 20; i++) {
+      animeList.add(top.anime![i]);
     }
+
+    return animeList;
   }
 }
