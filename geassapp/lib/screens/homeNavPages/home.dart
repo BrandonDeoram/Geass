@@ -108,6 +108,7 @@ class Home extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
                 child: Container(
                   height: 400.h,
+                  child: futureBuilderMethod(1),
                 ),
               ),
             ],

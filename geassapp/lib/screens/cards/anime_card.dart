@@ -23,7 +23,7 @@ class AnimeCard extends StatefulWidget {
 class _AnimeCardState extends State<AnimeCard> {
   @override
   Widget build(BuildContext context) {
-    double animeScore = (widget.anime.score! / 2).floorToDouble();
+    double animeScore = (widget.anime.score! / 2).ceilToDouble();
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.black,
@@ -56,7 +56,7 @@ class _AnimeCardState extends State<AnimeCard> {
                   width: 800.w,
                   child: Image(
                     image: NetworkImage(widget.anime.imageUrl),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -132,19 +132,22 @@ class _AnimeCardState extends State<AnimeCard> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 8.0),
+                          padding: EdgeInsets.only(top: 8.0, left: 10),
                           child: Text(animeScore.toString()),
                         )
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 10, right: 10),
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        right: 10,
+                      ),
                       child: Container(
-                        height: 500.h,
+                        height: 450.h,
                         child: SingleChildScrollView(
                           child: ReadMoreText(
                             widget.anime.synopsis.toString(),
-                            trimLines: 11,
+                            trimLines: 10,
                             trimMode: TrimMode.Line,
                             trimCollapsedText: '"',
                             trimExpandedText: ' show less',
