@@ -12,7 +12,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 // ignore_for_file: prefer_const_constructors
 class AnimeCard extends StatefulWidget {
-  final AnimeItem anime;
+  final dynamic anime;
   // ignore: use_key_in_widget_constructors
   const AnimeCard({required this.anime});
 
@@ -74,7 +74,7 @@ class _AnimeCardState extends State<AnimeCard> {
                   width: 50.0,
                   height: 50.0,
                   decoration: BoxDecoration(
-                    color: Colors.red,
+                    color: Color.fromRGBO(145, 0, 0, 1.0),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -163,11 +163,11 @@ class _AnimeCardState extends State<AnimeCard> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
       floatingActionButton: SpeedDial(
         spaceBetweenChildren: 40,
-        overlayColor: Colors.transparent,
+        overlayColor: Color.fromRGBO(69, 69, 69, 1.0),
         buttonSize: Size(50, 50),
         icon: Icons.add,
         activeIcon: Icons.close,
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromRGBO(232, 232, 232, 1.0),
         direction: SpeedDialDirection.right,
         children: [
           SpeedDialChild(

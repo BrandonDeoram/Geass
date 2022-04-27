@@ -12,6 +12,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, int> cat = {"Recommended": 1, "Adventure": 2, "Action": 1};
     return SafeArea(
       child: ListView(
         children: [
@@ -68,49 +69,7 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                    child: Text(
-                      "Recommended",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.fromLTRB(160, 5, 0, 0),
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "See all >",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      )),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Container(
-                  height: 400.h,
-                  child: futureBuilderMethod(2),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Text(
-                  "Upcoming",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
-                child: Container(
-                  height: 400.h,
-                  child: futureBuilderMethod(1),
-                ),
-              ),
+              getCatWidgets(cat, context),
             ],
           ),
         ],
@@ -118,11 +77,55 @@ class Home extends StatelessWidget {
     );
   }
 
+  Widget getCatWidgets(Map<String, int> cat, BuildContext context) {
+    List<Widget> list = <Widget>[];
+    for (var i = 0; i < cat.length; i++) {
+      list.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 470.h,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    child: Text(
+                      cat.keys.elementAt(i),
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                  ),
+                ),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(160, 20, 0, 0),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "See all >",
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    )),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Container(
+                height: 400.h,
+                child: futureBuilderMethod(cat.values.elementAt(i)),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Column(children: list);
+  }
+
   futureBuilderMethod(int genreID) {
     return FutureBuilder(
         future: DataBaseService().fetchGenre(genreID),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<AnimeItem>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -147,7 +150,6 @@ class Home extends StatelessWidget {
                                   anime: snapshot.data![index],
                                 )),
                       );
-                      print(snapshot.data![index].title);
                     },
                     child: Container(
                       width: 280.w,

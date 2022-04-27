@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 class DataBaseService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final jikan = Jikan();
 
   //Read
   Future<void> getAllAnime() async {
@@ -96,5 +97,23 @@ class DataBaseService {
     }
 
     return animeList;
+  }
+
+  Future<List<Recommendation>> fetchReccomendation() async {
+    var rec = await jikan.getAnimeRecommendations(1);
+    List<Recommendation> recList = [];
+    for (var i = 0; i <= 20; i++) {
+      recList.add(rec[i]);
+    }
+    return recList;
+  }
+
+  Future<List<Top>> fetchTop() async {
+    var rec = await jikan.getTop(TopType.anime, subtype: TopSubtype.airing);
+    List<Top> topList = [];
+    for (var i = 0; i <= 20; i++) {
+      topList.add(rec[i]);
+    }
+    return topList;
   }
 }
