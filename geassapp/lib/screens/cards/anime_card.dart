@@ -34,8 +34,11 @@ class _AnimeCardState extends State<AnimeCard> {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: ClipRRect(
-                  borderRadius:
-                      BorderRadius.only(bottomRight: Radius.circular(50)),
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(50),
+                    topLeft: Radius.circular(120),
+                    topRight: Radius.circular(80),
+                  ),
                   child: Container(
                     height: 800.h,
                     width: 1200.w,

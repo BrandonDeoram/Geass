@@ -37,7 +37,7 @@ class Home extends StatelessWidget {
                             bottomLeft: Radius.circular(60.0.r)),
                         child: Image(
                           image: NetworkImage(
-                              'https://mangathrill.com/wp-content/uploads/2019/12/BhknXug1280x720.png'),
+                              'https://data.whicdn.com/images/333396361/original.gif'),
                           fit: BoxFit.fitHeight,
                         ),
                       ),
@@ -151,8 +151,10 @@ class Home extends StatelessWidget {
                                 )),
                       );
                     },
-                    child: Container(
+                    child: AnimatedContainer(
                       width: 280.w,
+                      duration: Duration(seconds: 3),
+                      curve: Curves.bounceInOut,
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                             topRight: Radius.circular(10.0.r),
