@@ -7,12 +7,19 @@ import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
 import 'package:jikan_api/jikan_api.dart';
 
+//Home
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Map<String, int> cat = {"Recommended": 1, "Adventure": 2, "Action": 1};
+    Map<String, int> cat = {
+      "Recommended": 1,
+      "Adventure": 2,
+      "Action": 1,
+      "Comedy": 4,
+      "Avant Garde": 5
+    };
     return SafeArea(
       child: ListView(
         children: [
