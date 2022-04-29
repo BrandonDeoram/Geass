@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/models/anime_class.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
+import 'package:geassapp/screens/homeNavPages/see_all_page.dart';
 import 'package:geassapp/services/database_service.dart';
 import 'package:jikan_api/jikan_api.dart';
 
@@ -107,7 +108,14 @@ class Home extends StatelessWidget {
                 Padding(
                     padding: EdgeInsets.fromLTRB(160, 20, 0, 0),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        var list = cat.entries.toList();
+
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SeeAll(list[i])));
+                      },
                       child: Text(
                         "See all >",
                         style: TextStyle(fontSize: 12),
