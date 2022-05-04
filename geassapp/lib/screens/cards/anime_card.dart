@@ -36,8 +36,8 @@ class _AnimeCardState extends State<AnimeCard> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(50),
-                    topLeft: Radius.circular(120),
-                    topRight: Radius.circular(80),
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
                   ),
                   child: Container(
                     height: 800.h,
@@ -63,14 +63,23 @@ class _AnimeCardState extends State<AnimeCard> {
                   ),
                 ),
               ),
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  )),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white70,
+                  radius: 50.r,
+                  child: IconButton(
+                      padding: EdgeInsets.only(right: 1),
+                      splashRadius: 1,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                      )),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.fromLTRB(338, 255, 0, 0),
                 child: Container(
@@ -152,7 +161,7 @@ class _AnimeCardState extends State<AnimeCard> {
                             widget.anime.synopsis.toString(),
                             trimLines: 10,
                             trimMode: TrimMode.Line,
-                            trimCollapsedText: '"',
+                            trimCollapsedText: 'Read More',
                             trimExpandedText: ' show less',
                           ),
                         ),

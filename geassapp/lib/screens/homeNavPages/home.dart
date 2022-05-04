@@ -98,7 +98,7 @@ class Home extends StatelessWidget {
                 Container(
                   width: 470.h,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Text(
                       cat.keys.elementAt(i),
                       style: Theme.of(context).textTheme.headline5,
@@ -166,10 +166,8 @@ class Home extends StatelessWidget {
                                 )),
                       );
                     },
-                    child: AnimatedContainer(
+                    child: Container(
                       width: 280.w,
-                      duration: Duration(seconds: 3),
-                      curve: Curves.bounceInOut,
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                             topRight: Radius.circular(10.0.r),

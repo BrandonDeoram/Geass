@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geassapp/main.dart';
 import 'package:geassapp/screens/home/home_page.dart';
+import 'package:geassapp/screens/homeNavPages/anime_lists.dart';
 import 'package:geassapp/screens/wrapper/landing_page.dart';
 import 'package:geassapp/screens/wrapper/user_name_page.dart';
 import 'package:geassapp/services/database_service.dart';
@@ -39,7 +40,7 @@ class Wrapper extends StatelessWidget {
                       if (snap.data != snapshot.data!.uid) {
                         return UserNamePage(snapshot.data!.email);
                       } else {
-                        return HomePage();
+                        return AnimeLists();
                       }
                     }
                 }

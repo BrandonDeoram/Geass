@@ -40,6 +40,8 @@ dependencies:
   flutter_speed_dial: ^5.1.0
   http: ^0.13.4
   jikan_api: ^1.6.1
+  
+  
   flutter:
     sdk: flutter
 

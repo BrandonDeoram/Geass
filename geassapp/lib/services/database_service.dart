@@ -116,4 +116,20 @@ class DataBaseService {
     }
     return topList;
   }
+
+  Future<List<Anime>> fetchAnime(List<dynamic> animeId) async {
+    List<Anime> listAnime = [];
+    for (var i = 0; i < animeId.length; i++) {
+      var rec = await jikan.getAnimeInfo(animeId[i]);
+      listAnime.add(rec);
+    }
+
+    return listAnime;
+  }
+
+  Stream getAnimeList() {
+    //Make call to specific list
+    var col = db.collection(Path.users()).doc(currentUser()).snapshots();
+    return col;
+  }
 }
