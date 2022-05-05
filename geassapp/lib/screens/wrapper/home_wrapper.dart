@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:geassapp/main.dart';
 import 'package:geassapp/screens/home/home_page.dart';
 import 'package:geassapp/screens/homeNavPages/anime_lists.dart';
+import 'package:geassapp/screens/homeNavPages/home.dart';
 import 'package:geassapp/screens/wrapper/landing_page.dart';
 import 'package:geassapp/screens/wrapper/user_name_page.dart';
 import 'package:geassapp/services/database_service.dart';
@@ -18,6 +19,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
@@ -40,7 +42,7 @@ class Wrapper extends StatelessWidget {
                       if (snap.data != snapshot.data!.uid) {
                         return UserNamePage(snapshot.data!.email);
                       } else {
-                        return AnimeLists();
+                        return HomePage();
                       }
                     }
                 }

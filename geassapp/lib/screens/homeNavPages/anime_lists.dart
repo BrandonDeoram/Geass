@@ -15,6 +15,7 @@ class AnimeLists extends StatefulWidget {
 
 class _AnimeListsState extends State<AnimeLists> {
   List<Anime> planToWatch = [];
+  final Stream fireBaseData = DataBaseService().getAnimeList();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,69 +27,123 @@ class _AnimeListsState extends State<AnimeLists> {
           children: [
             Text('Anime Lists'),
             Text('Plan to watch'),
-            IconButton(
-              onPressed: () {
-                DataBaseService().getAnimeList();
-              },
-              icon: Icon(
-                Icons.ac_unit,
-                color: Colors.white,
-              ),
-            ),
             StreamBuilder(
-                stream: DataBaseService().getAnimeList(),
+                stream: fireBaseData,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasData) {
                     //do as intended
-
-                    DataBaseService()
-                        .fetchAnime(snapshot.data['planToWatch'])
-                        .then((value) {
-                      if (mounted) {
-                        setState(() {
-                          planToWatch = value;
-                        });
-                      }
-                    });
+                    // DataBaseService()
+                    //     .fetchAnime(snapshot.data['planToWatch'])
+                    //     .then((value) {
+                    //   if (mounted) {
+                    //     setState(() {
+                    //       planToWatch = value;
+                    //     });
+                    //   }
+                    // });
 
                     return Container(
                       height: 400.h,
-                      child: ListView.separated(
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(
-                                indent: 10,
-                              ),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: planToWatch.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AnimeCard(
-                                            anime: planToWatch[index],
-                                          )),
-                                );
-                              },
-                              child: Container(
-                                width: 280.w,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(10.0.r),
-                                      bottomRight: Radius.circular(10.0.r),
-                                      topLeft: Radius.circular(10.0.r),
-                                      bottomLeft: Radius.circular(10.0.r)),
-                                  child: Image(
-                                    image: NetworkImage(
-                                        planToWatch[index].imageUrl),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              ),
-                            );
+                      child: FutureBuilder(
+                          future: DataBaseService()
+                              .fetchAnime(snapshot.data['planToWatch']),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Anime>> animeList) {
+                            if (animeList.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (animeList.hasData) {
+                              //do as intended
+                              print(animeList.data);
+                              return ListView.separated(
+                                  shrinkWrap: true,
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const Divider(
+                                            indent: 10,
+                                          ),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: animeList.data!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => AnimeCard(
+                                                    anime:
+                                                        animeList.data![index],
+                                                  )),
+                                        );
+                                      },
+                                      child: Container(
+                                        width: 280.w,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(10.0.r),
+                                              bottomRight:
+                                                  Radius.circular(10.0.r),
+                                              topLeft: Radius.circular(10.0.r),
+                                              bottomLeft:
+                                                  Radius.circular(10.0.r)),
+                                          child: Image(
+                                            image: NetworkImage(animeList
+                                                .data![index].imageUrl),
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            } else {
+                              return Text('null');
+                            }
                           }),
                     );
+                    // Container(
+                    //   height: 400.h,
+                    //   color: Colors.green,
+                    //   child: ListView.separated(
+                    //       separatorBuilder: (BuildContext context, int index) =>
+                    //           const Divider(
+                    //             indent: 10,
+                    //           ),
+                    //       scrollDirection: Axis.horizontal,
+                    //       itemCount: planToWatch.length,
+                    //       itemBuilder: (BuildContext context, int index) {
+                    //         return GestureDetector(
+                    //           onTap: () {
+                    //             Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => AnimeCard(
+                    //                         anime: planToWatch[index],
+                    //                       )),
+                    //             );
+                    //           },
+                    //           child: Container(
+                    //             width: 280.w,
+                    //             child: ClipRRect(
+                    //               borderRadius: BorderRadius.only(
+                    //                   topRight: Radius.circular(10.0.r),
+                    //                   bottomRight: Radius.circular(10.0.r),
+                    //                   topLeft: Radius.circular(10.0.r),
+                    //                   bottomLeft: Radius.circular(10.0.r)),
+                    //               child: Image(
+                    //                 image: NetworkImage(
+                    //                     planToWatch[index].imageUrl),
+                    //                 fit: BoxFit.fill,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         );
+                    //       }),
+                    // );
                   } else {
                     return Text('null');
                   }
