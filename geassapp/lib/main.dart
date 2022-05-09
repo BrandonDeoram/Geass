@@ -32,7 +32,7 @@ final TextTheme textTheme = TextTheme(
   headline3: GoogleFonts.poppins(
       fontSize: 48, fontWeight: FontWeight.w400, color: Colors.white),
   headline4: GoogleFonts.poppins(
-      fontSize: 25,
+      fontSize: 23,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.15,
       color: Colors.white),

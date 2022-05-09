@@ -42,7 +42,7 @@ class Wrapper extends StatelessWidget {
                       if (snap.data != snapshot.data!.uid) {
                         return UserNamePage(snapshot.data!.email);
                       } else {
-                        return AnimeLists();
+                        return HomePage();
                       }
                     }
                 }

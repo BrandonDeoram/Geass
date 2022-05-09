@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors,, prefer_const_literals_to_create_immutables
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
@@ -20,23 +22,24 @@ class _AnimeListsState extends State<AnimeLists> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
         backgroundColor: Theme.of(context).backgroundColor,
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Center(
                   child: Text(
-                'Anime Lists',
+                'Watch Lists',
                 style: Theme.of(context).textTheme.headline4,
               )),
               Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 20),
+                padding: EdgeInsets.only(bottom: 10, top: 5),
                 child: Text(
                   'Plan to watch',
-                  style: Theme.of(context).textTheme.headline5,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                 ),
               ),
               StreamBuilder(
@@ -51,32 +54,32 @@ class _AnimeListsState extends State<AnimeLists> {
                         children: [
                           Container(
                             height: 400.h,
-                            child: getList(
+                            child: GetList(
                                 snapshot: snapshot, list: "planToWatch"),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 5),
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
                             child: Text(
                               'Watching',
-                              style: Theme.of(context).textTheme.headline5,
+                              style: TextStyle(fontSize: 18),
                             ),
                           ),
                           Container(
                             height: 400.h,
                             child:
-                                getList(snapshot: snapshot, list: "watching"),
+                                GetList(snapshot: snapshot, list: "watching"),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 5),
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
                             child: Text(
                               'Finished',
-                              style: Theme.of(context).textTheme.headline5,
+                              style: TextStyle(fontSize: 18),
                             ),
                           ),
                           Container(
                             height: 400.h,
                             child:
-                                getList(snapshot: snapshot, list: "finished"),
+                                GetList(snapshot: snapshot, list: "finished"),
                           ),
                         ],
                       );
@@ -92,10 +95,10 @@ class _AnimeListsState extends State<AnimeLists> {
   }
 }
 
-class getList extends StatelessWidget {
+class GetList extends StatelessWidget {
   late AsyncSnapshot<dynamic> snapshot;
   String list;
-  getList({
+  GetList({
     required this.snapshot,
     required this.list,
     Key? key,
@@ -112,6 +115,7 @@ class getList extends StatelessWidget {
             );
           } else if (animeList.hasData) {
             //do as intended
+            print(list);
             print(animeList.data);
             return ListView.separated(
                 shrinkWrap: true,
@@ -144,7 +148,7 @@ class getList extends StatelessWidget {
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: const Text('No'),
+                              child: Text('No'),
                             ),
                             TextButton(
                               onPressed: () {
@@ -175,7 +179,7 @@ class getList extends StatelessWidget {
                   );
                 });
           } else {
-            return Text('null');
+            return Text('no data');
           }
         });
   }
