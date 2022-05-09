@@ -45,17 +45,6 @@ class _AnimeListsState extends State<AnimeLists> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasData) {
-                      //do as intended
-                      // DataBaseService()
-                      //     .fetchAnime(snapshot.data['planToWatch'])
-                      //     .then((value) {
-                      //   if (mounted) {
-                      //     setState(() {
-                      //       planToWatch = value;
-                      //     });
-                      //   }
-                      // });
-
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -91,45 +80,6 @@ class _AnimeListsState extends State<AnimeLists> {
                           ),
                         ],
                       );
-                      // Container(
-                      //   height: 400.h,
-                      //   color: Colors.green,
-                      //   child: ListView.separated(
-                      //       separatorBuilder: (BuildContext context, int index) =>
-                      //           const Divider(
-                      //             indent: 10,
-                      //           ),
-                      //       scrollDirection: Axis.horizontal,
-                      //       itemCount: planToWatch.length,
-                      //       itemBuilder: (BuildContext context, int index) {
-                      //         return GestureDetector(
-                      //           onTap: () {
-                      //             Navigator.push(
-                      //               context,
-                      //               MaterialPageRoute(
-                      //                   builder: (context) => AnimeCard(
-                      //                         anime: planToWatch[index],
-                      //                       )),
-                      //             );
-                      //           },
-                      //           child: Container(
-                      //             width: 280.w,
-                      //             child: ClipRRect(
-                      //               borderRadius: BorderRadius.only(
-                      //                   topRight: Radius.circular(10.0.r),
-                      //                   bottomRight: Radius.circular(10.0.r),
-                      //                   topLeft: Radius.circular(10.0.r),
-                      //                   bottomLeft: Radius.circular(10.0.r)),
-                      //               child: Image(
-                      //                 image: NetworkImage(
-                      //                     planToWatch[index].imageUrl),
-                      //                 fit: BoxFit.fill,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         );
-                      //       }),
-                      // );
                     } else {
                       return Text('null');
                     }
@@ -180,6 +130,32 @@ class getList extends StatelessWidget {
                             builder: (context) => AnimeCard(
                                   anime: animeList.data![index],
                                 )),
+                      );
+                    },
+                    onLongPress: () {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          backgroundColor: Theme.of(context).backgroundColor,
+                          title: Text(
+                            'Delete ' + animeList.data![index].title + ' ?',
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                DataBaseService().deleteAnimeFromList(
+                                    list, animeList.data![index].malId);
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        ),
                       );
                     },
                     child: Container(

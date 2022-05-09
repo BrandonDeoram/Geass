@@ -82,6 +82,15 @@ class DataBaseService {
         .update({list: FieldValue.arrayUnion(fireBaseList)});
   }
 
+  deleteAnimeFromList(String list, int animeID) async {
+    List<int> fireBaseList = [];
+    fireBaseList.add(animeID);
+    var col = await db
+        .collection(Path.users())
+        .doc(currentUser())
+        .update({list: FieldValue.arrayRemove(fireBaseList)});
+  }
+
   currentUser() {
     final User? user = firebaseAuth.currentUser;
     final uid = user?.uid.toString();
