@@ -21,136 +21,186 @@ class _AnimeListsState extends State<AnimeLists> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text('Anime Lists'),
-            Text('Plan to watch'),
-            StreamBuilder(
-                stream: fireBaseData,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasData) {
-                    //do as intended
-                    // DataBaseService()
-                    //     .fetchAnime(snapshot.data['planToWatch'])
-                    //     .then((value) {
-                    //   if (mounted) {
-                    //     setState(() {
-                    //       planToWatch = value;
-                    //     });
-                    //   }
-                    // });
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Center(
+                  child: Text(
+                'Anime Lists',
+                style: Theme.of(context).textTheme.headline4,
+              )),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10, top: 20),
+                child: Text(
+                  'Plan to watch',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+              ),
+              StreamBuilder(
+                  stream: fireBaseData,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasData) {
+                      //do as intended
+                      // DataBaseService()
+                      //     .fetchAnime(snapshot.data['planToWatch'])
+                      //     .then((value) {
+                      //   if (mounted) {
+                      //     setState(() {
+                      //       planToWatch = value;
+                      //     });
+                      //   }
+                      // });
 
-                    return Container(
-                      height: 400.h,
-                      child: FutureBuilder(
-                          future: DataBaseService()
-                              .fetchAnime(snapshot.data['planToWatch']),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Anime>> animeList) {
-                            if (animeList.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (animeList.hasData) {
-                              //do as intended
-                              print(animeList.data);
-                              return ListView.separated(
-                                  shrinkWrap: true,
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                          const Divider(
-                                            indent: 10,
-                                          ),
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: animeList.data!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => AnimeCard(
-                                                    anime:
-                                                        animeList.data![index],
-                                                  )),
-                                        );
-                                      },
-                                      child: Container(
-                                        width: 280.w,
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(10.0.r),
-                                              bottomRight:
-                                                  Radius.circular(10.0.r),
-                                              topLeft: Radius.circular(10.0.r),
-                                              bottomLeft:
-                                                  Radius.circular(10.0.r)),
-                                          child: Image(
-                                            image: NetworkImage(animeList
-                                                .data![index].imageUrl),
-                                            fit: BoxFit.fill,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  });
-                            } else {
-                              return Text('null');
-                            }
-                          }),
-                    );
-                    // Container(
-                    //   height: 400.h,
-                    //   color: Colors.green,
-                    //   child: ListView.separated(
-                    //       separatorBuilder: (BuildContext context, int index) =>
-                    //           const Divider(
-                    //             indent: 10,
-                    //           ),
-                    //       scrollDirection: Axis.horizontal,
-                    //       itemCount: planToWatch.length,
-                    //       itemBuilder: (BuildContext context, int index) {
-                    //         return GestureDetector(
-                    //           onTap: () {
-                    //             Navigator.push(
-                    //               context,
-                    //               MaterialPageRoute(
-                    //                   builder: (context) => AnimeCard(
-                    //                         anime: planToWatch[index],
-                    //                       )),
-                    //             );
-                    //           },
-                    //           child: Container(
-                    //             width: 280.w,
-                    //             child: ClipRRect(
-                    //               borderRadius: BorderRadius.only(
-                    //                   topRight: Radius.circular(10.0.r),
-                    //                   bottomRight: Radius.circular(10.0.r),
-                    //                   topLeft: Radius.circular(10.0.r),
-                    //                   bottomLeft: Radius.circular(10.0.r)),
-                    //               child: Image(
-                    //                 image: NetworkImage(
-                    //                     planToWatch[index].imageUrl),
-                    //                 fit: BoxFit.fill,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         );
-                    //       }),
-                    // );
-                  } else {
-                    return Text('null');
-                  }
-                })
-          ],
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 400.h,
+                            child: getList(
+                                snapshot: snapshot, list: "planToWatch"),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 5),
+                            child: Text(
+                              'Watching',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ),
+                          Container(
+                            height: 400.h,
+                            child:
+                                getList(snapshot: snapshot, list: "watching"),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 5),
+                            child: Text(
+                              'Finished',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ),
+                          Container(
+                            height: 400.h,
+                            child:
+                                getList(snapshot: snapshot, list: "finished"),
+                          ),
+                        ],
+                      );
+                      // Container(
+                      //   height: 400.h,
+                      //   color: Colors.green,
+                      //   child: ListView.separated(
+                      //       separatorBuilder: (BuildContext context, int index) =>
+                      //           const Divider(
+                      //             indent: 10,
+                      //           ),
+                      //       scrollDirection: Axis.horizontal,
+                      //       itemCount: planToWatch.length,
+                      //       itemBuilder: (BuildContext context, int index) {
+                      //         return GestureDetector(
+                      //           onTap: () {
+                      //             Navigator.push(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                   builder: (context) => AnimeCard(
+                      //                         anime: planToWatch[index],
+                      //                       )),
+                      //             );
+                      //           },
+                      //           child: Container(
+                      //             width: 280.w,
+                      //             child: ClipRRect(
+                      //               borderRadius: BorderRadius.only(
+                      //                   topRight: Radius.circular(10.0.r),
+                      //                   bottomRight: Radius.circular(10.0.r),
+                      //                   topLeft: Radius.circular(10.0.r),
+                      //                   bottomLeft: Radius.circular(10.0.r)),
+                      //               child: Image(
+                      //                 image: NetworkImage(
+                      //                     planToWatch[index].imageUrl),
+                      //                 fit: BoxFit.fill,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         );
+                      //       }),
+                      // );
+                    } else {
+                      return Text('null');
+                    }
+                  })
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class getList extends StatelessWidget {
+  late AsyncSnapshot<dynamic> snapshot;
+  String list;
+  getList({
+    required this.snapshot,
+    required this.list,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: DataBaseService().fetchAnime(snapshot.data[list]),
+        builder: (BuildContext context, AsyncSnapshot<List<Anime>> animeList) {
+          if (animeList.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (animeList.hasData) {
+            //do as intended
+            print(animeList.data);
+            return ListView.separated(
+                shrinkWrap: true,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(
+                      indent: 10,
+                    ),
+                scrollDirection: Axis.horizontal,
+                itemCount: animeList.data!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AnimeCard(
+                                  anime: animeList.data![index],
+                                )),
+                      );
+                    },
+                    child: Container(
+                      width: 280.w,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10.0.r),
+                            bottomRight: Radius.circular(10.0.r),
+                            topLeft: Radius.circular(10.0.r),
+                            bottomLeft: Radius.circular(10.0.r)),
+                        child: Image(
+                          image: NetworkImage(animeList.data![index].imageUrl),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  );
+                });
+          } else {
+            return Text('null');
+          }
+        });
   }
 }

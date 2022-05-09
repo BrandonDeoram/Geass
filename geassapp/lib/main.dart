@@ -32,9 +32,9 @@ final TextTheme textTheme = TextTheme(
   headline3: GoogleFonts.poppins(
       fontSize: 48, fontWeight: FontWeight.w400, color: Colors.white),
   headline4: GoogleFonts.poppins(
-      fontSize: 34,
+      fontSize: 25,
       fontWeight: FontWeight.w400,
-      letterSpacing: 0.25,
+      letterSpacing: 0.15,
       color: Colors.white),
   headline5: GoogleFonts.poppins(
       fontSize: 20, fontWeight: FontWeight.w300, color: Colors.white),
@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.grey,
             primaryColor: Colors.white,
-            backgroundColor: Colors.black,
+            backgroundColor: Color.fromRGBO(24, 24, 24, 100),
             textTheme: textTheme,
           ),
           home: Wrapper(),
