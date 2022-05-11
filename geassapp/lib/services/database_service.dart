@@ -20,30 +20,14 @@ class DataBaseService {
     print(qshot.docs.map((e) => e.data));
   }
 
-  // getAnimes(AnimeNotifier animeNotifier) async {
-  //   final snapshot = await db.collection(Path.animes()).get();
-  //   List<Anime> _animeList = [];
-  //   for (var snap in snapshot.docs) {
-  //     Anime anime = Anime.fromMap(snap.data());
-  //     _animeList.add(anime);
-  //   }
-  // }
-
-  // Future<List<Anime>> getTypeAnime(String cat) async {
-  //   List<Anime> list = [];
-  //   var anime = db.collection(Path.animes());
-  //   await anime.where('categories', arrayContains: cat).get().then((snapshot) {
-  //     for (var snap in snapshot.docs) {
-  //       Anime anime = Anime.fromMap(snap.data());
-  //       list.add(anime);
-  //     }
-  //   });
-  //   return list;
-  // }
-
   Future<void> addUser(User1 user) async {
     var listUser = db.collection(Path.users());
     listUser.doc(currentUser()).set(user.toJson());
+  }
+
+  Future getUserInfo() async {
+    var id = await searchUser(firebaseAuth.currentUser!.uid);
+    return await db.collection(Path.users()).doc(id).get();
   }
 
   // Future<bool?> searchUser(String? email) async {

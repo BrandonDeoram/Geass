@@ -26,7 +26,7 @@ class _AnimeCardState extends State<AnimeCard> {
     double animeScore = (widget.anime.score! / 2).ceilToDouble();
     return Scaffold(
       extendBody: true,
-      backgroundColor: Color.fromRGBO(24, 24, 24, 100),
+      backgroundColor: Color.fromRGBO(32, 32, 32, 100),
       body: SafeArea(
           bottom: false,
           child: Stack(
@@ -204,7 +204,7 @@ class _AnimeCardState extends State<AnimeCard> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white12,
+        color: Color.fromRGBO(32, 32, 32, 90),
         shape: const CircularNotchedRectangle(),
         notchMargin: 14.0,
         child: Container(

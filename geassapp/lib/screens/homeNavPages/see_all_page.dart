@@ -13,7 +13,7 @@ class SeeAll extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Color.fromRGBO(32, 32, 32, 100),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
@@ -21,8 +21,7 @@ class SeeAll extends StatelessWidget {
           style: Theme.of(context).textTheme.headline5,
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
+        backgroundColor: Color.fromRGBO(32, 32, 32, 20),
       ),
       body: buildGridView(),
     );

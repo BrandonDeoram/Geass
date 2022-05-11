@@ -70,9 +70,9 @@ final TextTheme textTheme = TextTheme(
       color: Colors.white),
   caption: GoogleFonts.poppins(
       fontSize: 12,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w200,
       letterSpacing: 0.4,
-      color: Colors.white),
+      color: Colors.grey),
   overline: GoogleFonts.poppins(
       fontSize: 10,
       fontWeight: FontWeight.w400,
