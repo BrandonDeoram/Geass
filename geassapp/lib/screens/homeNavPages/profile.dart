@@ -23,7 +23,9 @@ class _ProfileState extends State<Profile> {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return null;
+
       final imageTemp = File(image.path);
+      DataBaseService().uploadBackgroundImage(image.path);
       setState(() {
         this.image = imageTemp;
       });
@@ -49,16 +51,53 @@ class _ProfileState extends State<Profile> {
             color: Color.fromRGBO(32, 32, 32, 100),
             height: 600.h,
             width: 2000.h,
-            child: image != null
-                ? Image.file(image!)
-                : Container(
-                    child: IconButton(
-                        color: Colors.white,
-                        iconSize: 40,
-                        onPressed: () {
-                          pickImage();
-                        },
-                        icon: Icon(Icons.file_upload_outlined))),
+            child: FutureBuilder(
+              future: DataBaseService().getBackgroundImage(), // async work
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Text('Loading....');
+                  default:
+                    if (snapshot.hasError)
+                      return Text('Error: ${snapshot.error}');
+                    else {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 0),
+                        child: Container(
+                          child: snapshot.data['backgroundImage'] != null
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 5.w, color: Colors.black)),
+                                  child: Image.file(
+                                    File(snapshot.data['backgroundImage']!),
+                                    fit: BoxFit.fill,
+                                  ),
+                                )
+                              : Container(
+                                  child: IconButton(
+                                      color: Colors.white,
+                                      iconSize: 40,
+                                      onPressed: () {
+                                        pickImage();
+                                      },
+                                      icon: Icon(Icons.file_upload_outlined))),
+                        ),
+                      );
+                    }
+                }
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 340, top: 170),
+            child: FlatButton(
+                onPressed: () {},
+                child: Icon(
+                  Icons.cloud_upload_outlined,
+                  size: 30,
+                  color: Colors.grey[400],
+                )),
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -72,6 +111,21 @@ class _ProfileState extends State<Profile> {
                 height: 300.h,
                 width: 300.w,
               ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: 100,
+              left: 100,
+            ),
+            child: Center(
+              child: FlatButton(
+                  onPressed: () {},
+                  child: Icon(
+                    Icons.add_circle_outline_sharp,
+                    size: 25,
+                    color: Colors.grey[400],
+                  )),
             ),
           ),
           FutureBuilder(
@@ -105,7 +159,7 @@ class _ProfileState extends State<Profile> {
                   }
               }
             },
-          )
+          ),
         ],
       ),
     ));

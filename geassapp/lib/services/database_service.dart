@@ -30,6 +30,26 @@ class DataBaseService {
     return await db.collection(Path.users()).doc(id).get();
   }
 
+  Future uploadBackgroundImage(String path) async {
+    var id = await searchUser(firebaseAuth.currentUser!.uid);
+    var data = await db
+        .collection(Path.users())
+        .doc(id)
+        .collection('Pictures')
+        .doc('1')
+        .set({"backgroundImage": path});
+  }
+
+  Future getBackgroundImage() async {
+    var id = await searchUser(firebaseAuth.currentUser!.uid);
+    return await db
+        .collection(Path.users())
+        .doc(id)
+        .collection('Pictures')
+        .doc('1')
+        .get();
+  }
+
   // Future<bool?> searchUser(String? email) async {
   //   bool? value;
   //   var collection =

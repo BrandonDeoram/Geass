@@ -64,8 +64,8 @@ final TextTheme textTheme = TextTheme(
       letterSpacing: 0.25,
       color: Colors.white),
   button: GoogleFonts.poppins(
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
+      fontSize: 5,
+      fontWeight: FontWeight.w300,
       letterSpacing: 1.25,
       color: Colors.white),
   caption: GoogleFonts.poppins(
