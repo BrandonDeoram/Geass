@@ -23,6 +23,11 @@ class DataBaseService {
   Future<void> addUser(User1 user) async {
     var listUser = db.collection(Path.users());
     listUser.doc(currentUser()).set(user.toJson());
+    listUser
+        .doc(currentUser())
+        .collection('Pictures')
+        .doc('1')
+        .set({'backgroundImage': "", "avatarImage": ""});
   }
 
   Future getUserInfo() async {
@@ -37,7 +42,17 @@ class DataBaseService {
         .doc(id)
         .collection('Pictures')
         .doc('1')
-        .set({"backgroundImage": path});
+        .set({"backgroundImage": path}, SetOptions(merge: true));
+  }
+
+  Future uploadAvatarImage(String path) async {
+    var id = await searchUser(firebaseAuth.currentUser!.uid);
+    var data = await db
+        .collection(Path.users())
+        .doc(id)
+        .collection('Pictures')
+        .doc('1')
+        .set({"avatarImage": path}, SetOptions(merge: true));
   }
 
   Future getBackgroundImage() async {

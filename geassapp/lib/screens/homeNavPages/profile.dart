@@ -19,13 +19,18 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   File? image;
-  Future pickImage() async {
+  Future pickImage(String type) async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return null;
 
       final imageTemp = File(image.path);
-      DataBaseService().uploadBackgroundImage(image.path);
+      if (type == "backgroundImage") {
+        DataBaseService().uploadBackgroundImage(image.path);
+      } else {
+        DataBaseService().uploadAvatarImage(image.path);
+      }
+
       setState(() {
         this.image = imageTemp;
       });
@@ -64,24 +69,17 @@ class _ProfileState extends State<Profile> {
                       return Padding(
                         padding: EdgeInsets.only(bottom: 0),
                         child: Container(
-                          child: snapshot.data['backgroundImage'] != null
+                          child: snapshot.data['backgroundImage'] != ""
                               ? Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                           width: 5.w, color: Colors.black)),
                                   child: Image.file(
-                                    File(snapshot.data['backgroundImage']!),
+                                    File(snapshot.data['backgroundImage']),
                                     fit: BoxFit.fill,
                                   ),
                                 )
-                              : Container(
-                                  child: IconButton(
-                                      color: Colors.white,
-                                      iconSize: 40,
-                                      onPressed: () {
-                                        pickImage();
-                                      },
-                                      icon: Icon(Icons.file_upload_outlined))),
+                              : Container(),
                         ),
                       );
                     }
@@ -92,26 +90,50 @@ class _ProfileState extends State<Profile> {
           Padding(
             padding: EdgeInsets.only(left: 340, top: 170),
             child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  pickImage('backgroundImage');
+                },
                 child: Icon(
                   Icons.cloud_upload_outlined,
                   size: 30,
                   color: Colors.grey[400],
                 )),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: 200,
-            ),
-            child: Center(
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    border: Border.all(width: 10.w, color: Colors.black)),
-                height: 300.h,
-                width: 300.w,
-              ),
-            ),
+          FutureBuilder(
+            future: DataBaseService().getBackgroundImage(), // async work
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Text('Loading....');
+                default:
+                  if (snapshot.hasError)
+                    return Text('Error: ${snapshot.error}');
+                  else {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 200,
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: 300.h,
+                          width: 300.w,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              border:
+                                  Border.all(width: 10.w, color: Colors.black)),
+                          child: snapshot.data['avatarImage'] != ""
+                              ? Image.file(
+                                  File(snapshot.data['avatarImage']!),
+                                  fit: BoxFit.fill,
+                                )
+                              : Container(),
+                        ),
+                      ),
+                    );
+                  }
+              }
+            },
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -120,7 +142,9 @@ class _ProfileState extends State<Profile> {
             ),
             child: Center(
               child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    pickImage('avatarImage');
+                  },
                   child: Icon(
                     Icons.add_circle_outline_sharp,
                     size: 25,
