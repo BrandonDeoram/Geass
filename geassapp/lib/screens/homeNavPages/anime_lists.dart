@@ -148,7 +148,8 @@ class GetList extends StatelessWidget {
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: Text('No'),
+                              child: Text('No',
+                                  style: Theme.of(context).textTheme.caption),
                             ),
                             TextButton(
                               onPressed: () {
@@ -156,7 +157,8 @@ class GetList extends StatelessWidget {
                                     list, animeList.data![index].malId);
                                 Navigator.pop(context);
                               },
-                              child: const Text('Yes'),
+                              child: Text('Yes',
+                                  style: Theme.of(context).textTheme.caption),
                             ),
                           ],
                         ),

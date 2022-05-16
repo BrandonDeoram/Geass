@@ -96,8 +96,8 @@ class _AnimeCardState extends State<AnimeCard> {
                 child: IconButton(
                     iconSize: 40.0,
                     onPressed: () {
-                      // DataBaseService()
-                      //     .addAnimeToList('favourites', widget.anime.animeId);
+                      DataBaseService()
+                          .addAnimeToList('favourites', widget.anime.malId);
                     },
                     icon: Icon(
                       Icons.favorite,
