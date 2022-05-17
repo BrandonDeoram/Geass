@@ -14,12 +14,6 @@ class DataBaseService {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final jikan = Jikan();
 
-  //Read
-  Future<void> getAllAnime() async {
-    QuerySnapshot qshot = await db.collection(Path.animes()).get();
-    print(qshot.docs.map((e) => e.data));
-  }
-
   Future<void> addUser(User1 user) async {
     var listUser = db.collection(Path.users());
     listUser.doc(currentUser()).set(user.toJson());
@@ -65,20 +59,6 @@ class DataBaseService {
         .get();
   }
 
-  // Future<bool?> searchUser(String? email) async {
-  //   bool? value;
-  //   var collection =
-  //       db.collection(Path.users()).where('email', isEqualTo: email).limit(1);
-  //   var snap = collection.snapshots();
-  //   await snap.isEmpty.then((result) => value = result);
-  //   return value;
-  // }
-  // Future<String> searchUser(String uuid) async {
-  //   bool? value;
-  //   var collection = db.collection(Path.users());
-  //   collection.
-  //   return collection;
-  // }
   Future<String> searchUser(String uuid) async {
     var a = await db.collection('users').doc(uuid).get();
     if (a.exists) {
@@ -159,5 +139,13 @@ class DataBaseService {
     //Make call to specific list
     var col = db.collection(Path.users()).doc(currentUser()).snapshots();
     return col;
+  }
+
+  Future<List> getFavouriteList() async {
+    //Make call to specific list
+    var favouriteList = [];
+    DocumentReference docRef = db.collection(Path.users()).doc(currentUser());
+    await docRef.get().then((value) => favouriteList = value.get('favourites'));
+    return favouriteList;
   }
 }

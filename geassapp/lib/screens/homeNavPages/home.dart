@@ -114,7 +114,7 @@ class Home extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SeeAll(list[i])));
+                                builder: (context) => SeeAll(list[i], false)));
                       },
                       child: Text(
                         "See all >",

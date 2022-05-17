@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/providers/google_signin.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
+import 'package:geassapp/screens/homeNavPages/see_all_page.dart';
 import 'package:geassapp/services/database_service.dart';
 import 'package:jikan_api/jikan_api.dart';
 import 'package:provider/provider.dart';
@@ -226,7 +227,13 @@ class _ProfileState extends State<Profile> {
                 Padding(
                   padding: EdgeInsets.only(top: 4, left: 160),
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        var list = {'Favourites': 1}.entries.toList();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SeeAll(list[0], true)));
+                      },
                       child: Text(
                         'See all >',
                         style: Theme.of(context).textTheme.caption,
