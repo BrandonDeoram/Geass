@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/screens/cards/top_anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
-import 'package:http/http.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -83,7 +84,7 @@ class _SearchState extends State<Search> {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: SpinKitSpinningLines(color: Colors.grey),
                       );
                     } else if (snapshot.hasData) {
                       //do as intended

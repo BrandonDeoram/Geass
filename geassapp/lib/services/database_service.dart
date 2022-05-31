@@ -120,11 +120,11 @@ class DataBaseService {
     var rec = await jikan.getTop(TopType.anime, subtype: TopSubtype.airing);
     List<Top> topList = [];
     List<dynamic> animeId = [];
-    var animeList;
     var listAnime;
     // for (var i = 0; i <= 20; i++) {
     //   topList.add(rec[i]);
     // }
+
     for (var i = 0; i <= 10; i++) {
       animeId.add(rec[i].malId);
     }
@@ -139,7 +139,7 @@ class DataBaseService {
       listAnime.add(rec);
     }
 
-    return listAnime;
+    return Future.value(listAnime);
   }
 
   Stream getAnimeList() {

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geassapp/models/anime_class.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/screens/homeNavPages/see_all_page.dart';
@@ -143,7 +144,7 @@ class Home extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: SpinKitSpinningLines(color: Colors.grey),
             );
           } else if (snapshot.hasData) {
             //do as intended
