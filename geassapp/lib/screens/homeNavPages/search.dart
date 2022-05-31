@@ -3,14 +3,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
+import 'package:geassapp/screens/cards/top_anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
+import 'package:http/http.dart';
 
-class Search extends StatelessWidget {
+class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
+
+  @override
+  State<Search> createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  late Future getTopAnime;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTopAnime = DataBaseService().fetchTop();
+  }
 
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
+
     return SafeArea(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -63,16 +79,14 @@ class Search extends StatelessWidget {
             child: Container(
               height: 450.h,
               child: FutureBuilder(
-                  future: DataBaseService().fetchTop(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<List> snapshot) {
+                  future: getTopAnime,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         child: CircularProgressIndicator(),
                       );
                     } else if (snapshot.hasData) {
                       //do as intended
-                      print(snapshot.data);
                       return ListView.separated(
                           shrinkWrap: true,
                           separatorBuilder: (BuildContext context, int index) =>

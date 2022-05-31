@@ -116,13 +116,20 @@ class DataBaseService {
     return recList;
   }
 
-  Future<List<Top>> fetchTop() async {
+  Future<List<Anime>> fetchTop() async {
     var rec = await jikan.getTop(TopType.anime, subtype: TopSubtype.airing);
     List<Top> topList = [];
-    for (var i = 0; i <= 20; i++) {
-      topList.add(rec[i]);
+    List<dynamic> animeId = [];
+    var animeList;
+    var listAnime;
+    // for (var i = 0; i <= 20; i++) {
+    //   topList.add(rec[i]);
+    // }
+    for (var i = 0; i <= 10; i++) {
+      animeId.add(rec[i].malId);
     }
-    return topList;
+
+    return await fetchAnime(animeId);
   }
 
   Future<List<Anime>> fetchAnime(List<dynamic> animeId) async {
