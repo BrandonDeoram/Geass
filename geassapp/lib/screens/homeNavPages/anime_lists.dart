@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
+import 'package:geassapp/screens/homeNavPages/see_all_page.dart';
 import 'package:geassapp/services/database_service.dart';
 import 'package:geassapp/widgets/GetList.dart';
+import 'package:geassapp/widgets/see_all_list.dart';
 import 'package:jikan_api/jikan_api.dart';
 
 class AnimeLists extends StatefulWidget {
@@ -18,7 +20,13 @@ class AnimeLists extends StatefulWidget {
 
 class _AnimeListsState extends State<AnimeLists> {
   List<Anime> planToWatch = [];
-  final Stream fireBaseData = DataBaseService().getAnimeList();
+  late final Stream fireBaseData;
+  @override
+  void initState() {
+    fireBaseData = DataBaseService().getAnimeList();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,7 +34,7 @@ class _AnimeListsState extends State<AnimeLists> {
         extendBody: true,
         backgroundColor: Theme.of(context).backgroundColor,
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(4.3),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -36,12 +44,32 @@ class _AnimeListsState extends State<AnimeLists> {
                 'Watch Lists',
                 style: Theme.of(context).textTheme.headline4,
               )),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 5),
-                child: Text(
-                  'Plan to watch',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                ),
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10, top: 5),
+                    child: Text(
+                      'Plan to watch',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(191, 0, 0, 0),
+                    child: TextButton(
+                        onPressed: () {
+                          var list = {'planToWatch': 1}.entries.toList();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SeeAll(list[0], true)));
+                        },
+                        child: Text(
+                          'See all >',
+                          style: Theme.of(context).textTheme.caption,
+                        )),
+                  ),
+                ],
               ),
               StreamBuilder(
                   stream: fireBaseData,
@@ -54,31 +82,73 @@ class _AnimeListsState extends State<AnimeLists> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            height: 400.h,
+                            height: 390.h,
                             child: GetList(
                                 snapshot: snapshot, list: "planToWatch"),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 5, bottom: 5),
-                            child: Text(
-                              'Watching',
-                              style: TextStyle(fontSize: 18),
-                            ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 5, bottom: 5),
+                                child: Text(
+                                  'Watching',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(230, 0, 0, 0),
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => SeeAllList(
+                                                  list: "Watching",
+                                                  snap: snapshot)));
+                                    },
+                                    child: Text(
+                                      'See all >',
+                                      style:
+                                          Theme.of(context).textTheme.caption,
+                                    )),
+                              ),
+                            ],
                           ),
                           Container(
-                            height: 400.h,
+                            height: 390.h,
                             child:
                                 GetList(snapshot: snapshot, list: "watching"),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 5, bottom: 5),
-                            child: Text(
-                              'Finished',
-                              style: TextStyle(fontSize: 18),
-                            ),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 0, bottom: 0),
+                                child: Text(
+                                  'Finished',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(250, 0, 0, 0),
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => SeeAllList(
+                                                  list: "Finished",
+                                                  snap: snapshot)));
+                                    },
+                                    child: Text(
+                                      'See all >',
+                                      style:
+                                          Theme.of(context).textTheme.caption,
+                                    )),
+                              ),
+                            ],
                           ),
                           Container(
-                            height: 400.h,
+                            height: 390.h,
                             child:
                                 GetList(snapshot: snapshot, list: "finished"),
                           ),
