@@ -118,7 +118,7 @@ class _AnimeCardState extends State<AnimeCard> {
                       children: [
                         for (var i in widget.anime.genres)
                           Text(
-                            i.name + " ",
+                            i['name'] + " ",
                             style: TextStyle(
                                 fontWeight: FontWeight.w200,
                                 color: Colors.grey),
@@ -158,7 +158,7 @@ class _AnimeCardState extends State<AnimeCard> {
                         height: 450.h,
                         child: SingleChildScrollView(
                           child: ReadMoreText(
-                            widget.anime.synopsis.toString(),
+                            widget.anime.description.toString(),
                             trimLines: 10,
                             trimMode: TrimMode.Line,
                             trimCollapsedText: 'Read More',

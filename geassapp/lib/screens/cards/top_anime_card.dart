@@ -11,7 +11,7 @@ import 'package:jikan_api/jikan_api.dart';
 import 'package:readmore/readmore.dart';
 
 class TopAnimeCard extends StatefulWidget {
-  final Top anime;
+  final Anime anime;
   const TopAnimeCard({required this.anime});
 
   @override

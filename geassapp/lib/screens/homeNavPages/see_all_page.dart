@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
-import 'package:jikan_api/src/model/anime/anime_item.dart';
+import 'package:jikan_api/jikan_api.dart';
 
 class SeeAll extends StatefulWidget {
   final MapEntry<String, int> list;
@@ -49,9 +49,9 @@ class _SeeAllState extends State<SeeAll> {
     );
   }
 
-  FutureBuilder<List<AnimeItem>> buildGridView() {
+  FutureBuilder<List<Anime>> buildGridView() {
     return FutureBuilder(
-        future: DataBaseService().fetchGenre(widget.list.value),
+        future: DataBaseService().fetchReccomendation(widget.list.value),
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -101,7 +101,7 @@ class _SeeAllState extends State<SeeAll> {
                   }),
             );
           } else {
-            return Text('null');
+            return Text('Reg Anime Null');
           }
         });
   }

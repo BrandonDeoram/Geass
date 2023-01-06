@@ -7,39 +7,74 @@ import 'package:geassapp/screens/cards/top_anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:jikan_api/jikan_api.dart';
 
-class Search extends StatefulWidget {
-  const Search({Key? key}) : super(key: key);
+class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
-  State<Search> createState() => _SearchState();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchState extends State<Search> {
+class _SearchPageState extends State<SearchPage> {
+  final TextEditingController controller = TextEditingController();
   late Future getTopAnime;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getTopAnime = DataBaseService().fetchTop();
+    controller.addListener(() {
+      // getSearchAnime();
+    });
   }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the widget tree.
+    // This also removes the _printLatestValue listener.
+    controller.dispose();
+    super.dispose();
+  }
+
+  // getSearchAnime() {
+  //   return FutureBuilder(
+  //       future: DataBaseService().searchBarAnime(controller.text),
+  //       builder: (BuildContext context, AsyncSnapshot<List<Search>> snapshot) {
+  //         if (snapshot.connectionState == ConnectionState.waiting) {
+  //           return Center(
+  //             child: SpinKitSpinningLines(color: Colors.grey),
+  //           );
+  //         } else if (snapshot.hasData) {
+  //           print(snapshot.data);
+  //           //do as intended
+  //           return Container(
+  //             child: Text('hello'),
+  //           );
+  //         } else {
+  //           return Text('null');
+  //         }
+  //       });
+  // }
 
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_const_constructors
 
     return SafeArea(
+      maintainBottomViewPadding: true,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(12.0),
             child: Center(
               child: Container(
                   height: 150.h,
                   width: 1000.w,
                   child: TextField(
+                      controller: controller,
                       textAlignVertical: TextAlignVertical.bottom,
                       decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -67,6 +102,7 @@ class _SearchState extends State<Search> {
                           fillColor: Colors.black54))),
             ),
           ),
+          // Center(child: getSearchAnime()),
           lookingFor(),
           Padding(
             padding: EdgeInsets.only(top: 50, left: 15),
@@ -88,6 +124,8 @@ class _SearchState extends State<Search> {
                       );
                     } else if (snapshot.hasData) {
                       //do as intended
+                      print("Printing data");
+                      print(snapshot.data);
                       return ListView.separated(
                           shrinkWrap: true,
                           separatorBuilder: (BuildContext context, int index) =>

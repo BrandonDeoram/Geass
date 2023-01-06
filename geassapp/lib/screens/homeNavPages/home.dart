@@ -1,15 +1,36 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geassapp/models/MALAnime.dart';
 import 'package:geassapp/models/anime_class.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/screens/homeNavPages/see_all_page.dart';
 import 'package:geassapp/services/database_service.dart';
 import 'package:jikan_api/jikan_api.dart';
+import 'package:http/http.dart' as http;
 
 //Home
+// Future<List<MALAnime>> fetchAlbum() async {
+//   final response = await http
+//       .get(Uri.parse('https://api.jikan.moe/v4/top/anime?limit=4&limit=20'));
+
+//   if (response.statusCode == 200) {
+//     dynamic data = jsonDecode(response.body);
+//     List<MALAnime> malAnime = [];
+//     for (var i = 0; i < data['data'].length; i++) {
+//       malAnime.add(MALAnime.fromJson(data['data'][i]));
+//     }
+
+//     return malAnime;
+//   } else {
+//     throw Exception('Failed to load album');
+//   }
+// }
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -18,15 +39,20 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late Future<List<MALAnime>> reccomendedAnime;
   @override
+  void initState() {
+    super.initState();
+    reccomendedAnime = DataBaseService().getReccomendedAnime(1);
+  }
+
   Widget build(BuildContext context) {
     Map<String, int> cat = {
       "Recommended": 1,
-      "Adventure": 2,
-      "Action": 1,
-      "Comedy": 4,
-      "Avant Garde": 5
+      // "Action": 16498,
+      // "Adventure": 21,
     };
+
     return SafeArea(
       child: ListView(
         children: [
@@ -145,7 +171,7 @@ class _HomeState extends State<Home> {
 
   futureBuilderMethod(int genreID) {
     return FutureBuilder(
-        future: DataBaseService().fetchGenre(genreID),
+        future: reccomendedAnime,
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -153,6 +179,7 @@ class _HomeState extends State<Home> {
             );
           } else if (snapshot.hasData) {
             //do as intended
+            print("printing snapshot: {$snapshot}");
             return ListView.separated(
                 shrinkWrap: true,
                 separatorBuilder: (BuildContext context, int index) =>

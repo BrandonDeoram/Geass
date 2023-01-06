@@ -1,11 +1,10 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:geassapp/models/anime_class.dart';
+import 'package:geassapp/models/MALAnime.dart';
 import 'package:geassapp/models/user1.dart';
-import 'package:geassapp/providers/anime_notifier.dart';
-import 'package:geassapp/screens/homeNavPages/anime_lists.dart';
 import 'package:geassapp/services/path_service.dart';
+import 'package:http/http.dart';
 import 'package:jikan_api/jikan_api.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,6 +12,22 @@ class DataBaseService {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final jikan = Jikan();
+  final url = "https://api.jikan.moe/v4/";
+
+  //Helpers
+  List<MALAnime> getResponse(Response response) {
+    if (response.statusCode == 200) {
+      dynamic data = jsonDecode(response.body);
+      List<MALAnime> malAnime = [];
+      for (var i = 0; i < data['data'].length; i++) {
+        malAnime.add(MALAnime.fromJson(data['data'][i]));
+      }
+
+      return malAnime;
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
 
   Future<void> addUser(User1 user) async {
     var listUser = db.collection(Path.users());
@@ -96,37 +111,35 @@ class DataBaseService {
     return uid;
   }
 
-  Future<List<AnimeItem>> fetchGenre(int genreID) async {
-    var jikan = Jikan();
-    var top = await jikan.getGenre(genreID, GenreType.anime);
-    List<AnimeItem> animeList = [];
-    for (var i = 0; i <= 20; i++) {
-      animeList.add(top.anime![i]);
-    }
+  Future<List<Anime>> fetchGenre() async {
+    var top = await jikan.getAnimeGenres(type: GenreType.genres);
+    List<int> malIds = [2];
+    var search = await jikan.searchAnime(type: AnimeType.tv, genres: malIds);
+    List<Anime> animeList = await fetchAnime(malIds);
+    // for (var i = 0; i <= 20; i++) {
+    //   animeList.add(top[i].malId);
+    // }
 
     return animeList;
   }
 
-  Future<List<Recommendation>> fetchReccomendation() async {
-    var rec = await jikan.getAnimeRecommendations(1);
-    List<Recommendation> recList = [];
+  Future<List<Anime>> fetchReccomendation(int id) async {
+    var rec = await jikan.getAnimeRecommendations(id);
+    List<int> recList = [];
     for (var i = 0; i <= 20; i++) {
-      recList.add(rec[i]);
+      recList.add(rec[i].entry.malId);
     }
-    return recList;
+    return await fetchAnime(recList);
   }
 
   Future<List<Anime>> fetchTop() async {
-    var rec = await jikan.getTop(TopType.anime, subtype: TopSubtype.airing);
-    List<Top> topList = [];
+    var top =
+        await jikan.getTopAnime(type: TopType.tv, subtype: TopSubtype.airing);
     List<dynamic> animeId = [];
     var listAnime;
-    // for (var i = 0; i <= 20; i++) {
-    //   topList.add(rec[i]);
-    // }
 
     for (var i = 0; i <= 10; i++) {
-      animeId.add(rec[i].malId);
+      animeId.add(top[i].malId);
     }
 
     return await fetchAnime(animeId);
@@ -134,8 +147,9 @@ class DataBaseService {
 
   Future<List<Anime>> fetchAnime(List<dynamic> animeId) async {
     List<Anime> listAnime = [];
-    for (var i = 0; i < animeId.length; i++) {
-      var rec = await jikan.getAnimeInfo(animeId[i]);
+    var length = animeId.length;
+    for (var i = 0; i < length; i++) {
+      var rec = await jikan.getAnime(animeId[i]);
       listAnime.add(rec);
     }
 
@@ -155,4 +169,67 @@ class DataBaseService {
     await docRef.get().then((value) => favouriteList = value.get('favourites'));
     return favouriteList;
   }
+
+  Future<List> searchBarAnime(String name) async {
+    var rec = await jikan.searchAnime(query: name);
+    List newList = [];
+    newList = rec.toList();
+    return newList;
+  }
+
+  Future<List<MALAnime>> getTopAnime() async {
+    final response =
+        await http.get(Uri.parse(url + 'top/anime?limit=4&limit=20'));
+
+    return getResponse(response);
+  }
+
+  Future<List<MALAnime>> getReccomendedAnime(int id) async {
+    final response =
+        await http.get(Uri.parse(url + 'anime/$id/recommendations'));
+
+    if (response.statusCode == 200) {
+      dynamic data = jsonDecode(response.body);
+      late List<MALAnime> malList = [];
+      List<int> malId = [];
+      // Get mal id
+      for (var i = 0; i < 10; i++) {
+        malList.add(await getMALAnime(data['data'][i]['entry']['mal_id']));
+        await Future.delayed(Duration(milliseconds: 300));
+        print(malList[i].title);
+      }
+      return malList;
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  Future<MALAnime> getMALAnime(int id) async {
+    final response = await http.get(Uri.parse(url + 'anime/$id/full'));
+
+    if (response.statusCode == 200) {
+      dynamic data = jsonDecode(response.body);
+      return MALAnime.fromJson(data['data']);
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  // Future<List<MALAnime>> getMALAnimeID(List<int> malIDS) async {
+  //   List<MALAnime> malList = [];
+  //   int id;
+  //   print("printing list");
+  //   for (var i = 0; i < 10; i++) {
+  //     id = malIDS[i];
+  //     final response = await http
+  //         .get(Uri.parse(url + 'anime/$id/full'))
+  //         .whenComplete(() => const Duration(seconds: 3));
+  //     dynamic data = jsonDecode(response.body);
+  //     malList.add(MALAnime.fromJson(data['data']));
+  //     print(malList[i]);
+  //   }
+  //   print("printing list");
+  //   print(malList);
+  //   return malList;
+  // }
 }

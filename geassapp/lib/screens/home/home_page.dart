@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   Widget? _child;
   @override
   void initState() {
-    _child = AnimeLists();
+    _child = Home();
     super.initState();
   }
 
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           _child = Home();
           break;
         case 1:
-          _child = Search();
+          _child = SearchPage();
           break;
         case 2:
           _child = AnimeLists();
