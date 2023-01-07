@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -40,19 +41,20 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Future<List<MALAnime>> reccomendedAnime;
+  late Future<List<MALAnime>> rec;
+  Map<String, int> cat = {
+    "Recommended": 1,
+    "Action": 205,
+    // "Adventure": 21,
+  };
+
   @override
   void initState() {
     super.initState();
-    reccomendedAnime = DataBaseService().getReccomendedAnime(1);
+    // reccomendedAnime = DataBaseService().getReccomendedAnime(1);
   }
 
   Widget build(BuildContext context) {
-    Map<String, int> cat = {
-      "Recommended": 1,
-      // "Action": 16498,
-      // "Adventure": 21,
-    };
-
     return SafeArea(
       child: ListView(
         children: [
@@ -171,7 +173,7 @@ class _HomeState extends State<Home> {
 
   futureBuilderMethod(int genreID) {
     return FutureBuilder(
-        future: reccomendedAnime,
+        future: DataBaseService().getReccomendedAnime(genreID),
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(

@@ -188,19 +188,21 @@ class DataBaseService {
     final response =
         await http.get(Uri.parse(url + 'anime/$id/recommendations'));
 
+    await Future.delayed(const Duration(milliseconds: 2000));
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
       late List<MALAnime> malList = [];
       List<int> malId = [];
       // Get mal id
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < 5; i++) {
         malList.add(await getMALAnime(data['data'][i]['entry']['mal_id']));
-        await Future.delayed(Duration(milliseconds: 300));
+        //400
+        await Future.delayed(const Duration(milliseconds: 1000));
         print(malList[i].title);
       }
       return malList;
     } else {
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load animes ');
     }
   }
 

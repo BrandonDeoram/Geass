@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:geassapp/models/MALAnime.dart';
 import 'package:geassapp/screens/cards/anime_card.dart';
 import 'package:geassapp/services/database_service.dart';
 import 'package:jikan_api/jikan_api.dart';
@@ -18,11 +19,12 @@ class SeeAll extends StatefulWidget {
 
 class _SeeAllState extends State<SeeAll> {
   late List favourites = [];
-  @override
+  late Future<List<MALAnime>> reccomendedAnime;
   void initState() {
     // TODO: implement initState
     super.initState();
     Future<List> favouriteList = DataBaseService().getFavouriteList();
+    reccomendedAnime = DataBaseService().getReccomendedAnime(widget.list.value);
     favouriteList.then((value) {
       setState(() {
         favourites = value;
@@ -49,9 +51,9 @@ class _SeeAllState extends State<SeeAll> {
     );
   }
 
-  FutureBuilder<List<Anime>> buildGridView() {
+  FutureBuilder<List<MALAnime>> buildGridView() {
     return FutureBuilder(
-        future: DataBaseService().fetchReccomendation(widget.list.value),
+        future: reccomendedAnime,
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
